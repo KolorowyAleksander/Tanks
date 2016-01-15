@@ -1,24 +1,28 @@
 package tanks;
 
+import java.util.EnumMap;
+
 public class Move {
+    enum MoveSections {Movement, Rotation, Shooting};
+
     enum Movement {Staying, Forward, Backward};
-    public Movement movement;
-
-    enum Rotation {Staying, Clockwise, Counterclockwise};
-    public Rotation rotation;
-
+    enum Rotation {Staying, Clockwise, CounterClockwise};
     enum Shooting {NotShoots, Shoots}
-    public Shooting shooting;
+
+    private EnumMap<MoveSections, Enum> sections = new EnumMap<MoveSections, Enum>(MoveSections.class);
 
     public Move(Movement movement, Rotation rotation, Shooting shooting) {
-        this.movement = movement;
-        this.rotation = rotation;
-        this.shooting = shooting;
-    }
+        sections.put(MoveSections.Movement, movement);
+        sections.put(MoveSections.Rotation, rotation);
+        sections.put(MoveSections.Shooting, shooting);    }
 
     public Move() {
-        this.movement = Movement.Staying;
-        this.rotation = Rotation.Staying;
-        this.shooting = Shooting.NotShoots;
+        sections.put(MoveSections.Movement, Movement.Staying);
+        sections.put(MoveSections.Rotation, Rotation.Staying);
+        sections.put(MoveSections.Shooting, Shooting.NotShoots);
+    }
+
+    public void setMoveSection(MoveSections section, Enum value) {
+        sections.put(section, value);
     }
 }

@@ -10,27 +10,24 @@ import javafx.util.Duration;
 import java.util.LinkedList;
 import java.util.List;
 
-public class GameState extends State {
-    private double fieldWidth = 800.0, fieldHeight = 600.0;
+abstract public class GameState extends State {
+    protected Player players[];
 
-    private Player players[];
-
-    private List<Bullet> bullets;
+    protected List<Bullet> bullets;
 
     private Timeline gameLoopInfiniteTimeline;
 
-    private long startTimeInNanos;
-    private long currentTimeInNanos;
-    private double counter = 0;
+    protected long startTimeInNanos;
+    protected long currentTimeInNanos;
 
     final static private int framesPerSecond = 30;
+    protected double fieldWidth = 800.0, fieldHeight = 600.0;
 
-    EventHandler<ActionEvent> gameLoop;
+    protected EventHandler<ActionEvent> gameLoop;
 
     public GameState(String fxmlFileName) {
         super(fxmlFileName);
 
-        players = new Player[2];
         bullets = new LinkedList<Bullet>();
 
         gameLoopInfiniteTimeline = createGameLoopTimeline(framesPerSecond);
@@ -64,11 +61,13 @@ public class GameState extends State {
         return gameLoop;
     }
 
-    private void drawOnCanvas() {
+    public Player getPlayer(int playerNumber) {
+        return players[playerNumber];
     }
 
-    private void updateGame(double deltaTime) {
-    }
+    abstract protected void drawOnCanvas();
+
+    abstract protected void updateGame(double deltaTime);
 
     public long getStartTimeInNanos() {
         return startTimeInNanos;

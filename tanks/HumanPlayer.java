@@ -11,15 +11,7 @@ public class HumanPlayer extends Player {
 
     public void orderInput() {} ;
 
-    private void setMovementInMoveBuffer(int player, Move.Movement movement) {
-        moveBuffer.movement = movement;
-    }
-
-    private void setRotationInMoveBuffer(int player, Move.Rotation rotation) {
-        moveBuffer.rotation = rotation;
-    }
-
-    private void setShootingInMoveBuffer(int player, Move.Shooting shooting) {
-        moveBuffer.shooting = shooting;
+    public void setMoveBufferSection(Move.MoveSections section, Enum value) {
+        moveBuffer.setMoveSection(section, value);
     }
 }
