@@ -1,5 +1,5 @@
 package tanks;
 
-public interface IPlayer {
+public interface Player {
     Move makeMove(Move.Movement movement, Move.Rotation rotation, boolean isShooting);
 }
