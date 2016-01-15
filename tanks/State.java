@@ -18,8 +18,6 @@ public class State{
     protected Scene scene;
     protected Controller controller;
 
-    protected Timeline timeline;
-
     public State(String fxmlFileName) {
         FXMLLoader fxmlLoader = createFXMLLoader(fxmlFileName);
 
@@ -47,13 +45,6 @@ public class State{
         URL location = getClass().getResource(fxmlFileName);
         FXMLLoader fxmlLoader = new FXMLLoader(location);
         return fxmlLoader;
-    }
-
-    private Timeline createTimeline(double duration) {
-        Timeline timeline = new Timeline();
-        timeline.setCycleCount(((int) duration));
-
-        return timeline;
     }
 
     public Scene getScene() {

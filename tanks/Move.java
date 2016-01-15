@@ -1,17 +1,24 @@
 package tanks;
 
 public class Move {
-    enum Movement {Forward, Backward};
-    Movement movement;
+    enum Movement {Staying, Forward, Backward};
+    public Movement movement;
 
-    enum Rotation {Clockwise, Counterclockwise};
-    Rotation rotation;
+    enum Rotation {Staying, Clockwise, Counterclockwise};
+    public Rotation rotation;
 
-    boolean isShooting;
+    enum Shooting {NotShoots, Shoots}
+    public Shooting shooting;
 
-    public Move(Movement movement, Rotation rotation, boolean isShooting) {
+    public Move(Movement movement, Rotation rotation, Shooting shooting) {
         this.movement = movement;
         this.rotation = rotation;
-        this.isShooting = isShooting;
+        this.shooting = shooting;
+    }
+
+    public Move() {
+        this.movement = Movement.Staying;
+        this.rotation = Rotation.Staying;
+        this.shooting = Shooting.NotShoots;
     }
 }
