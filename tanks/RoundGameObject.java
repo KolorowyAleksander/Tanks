@@ -55,5 +55,10 @@ public class RoundGameObject {
             return false;
     }
 
+    public void update(double deltaTime) {
+        double deltaX = velocity * Math.cos(rotationAngle) * deltaTime;
+        double deltaY = velocity * Math.sin(rotationAngle) * deltaTime;
+        center.add(deltaX, deltaY);
+    }
 
 }

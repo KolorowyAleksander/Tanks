@@ -5,7 +5,9 @@ public class Tank extends RoundGameObject {
     public double healthPoints = 1000.0;
     public double rangeOfVision = 30.0;
     public double angularVelocity;
-    private double shootInterval = 0.5;
+    private double shotInterval = 0.5;
+    private double timeFromLastShot = 0.0;
+
 
     public Tank(double startX, double startY, double startDegree, double radius, double velocity, double angularVelocity) {
         super(startX, startY, startDegree, radius, velocity);
@@ -15,5 +17,23 @@ public class Tank extends RoundGameObject {
     public Bullet shoot() {
         Bullet bullet = new Bullet(center.getX(), center.getY(), rotationAngle, 1, 10, 100);
         return bullet;
+    }
+
+    public void update(double deltaTime) {
+        super.update(deltaTime);
+        timeFromLastShot += deltaTime;
+    }
+
+    public double getShotInterval() {
+        return shotInterval;
+    }
+
+    public boolean isReaadyToShoot() {
+        if (timeFromLastShot >= shotInterval) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

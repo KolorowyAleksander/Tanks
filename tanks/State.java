@@ -1,10 +1,13 @@
 package tanks;
 
+import javafx.animation.Animation;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -14,6 +17,8 @@ import java.util.logging.Logger;
 public class State{
     protected Scene scene;
     protected Controller controller;
+
+    protected Timeline timeline;
 
     public State(String fxmlFileName) {
         FXMLLoader fxmlLoader = createFXMLLoader(fxmlFileName);
@@ -32,6 +37,8 @@ public class State{
             System.out.println(exception.getMessage());
         }
 
+        controller.setAssociatedState(this);
+
         Parent root = controller.getRoot();
         scene = new Scene(root, root.prefWidth(0), root.prefHeight(0));
     }
@@ -40,6 +47,13 @@ public class State{
         URL location = getClass().getResource(fxmlFileName);
         FXMLLoader fxmlLoader = new FXMLLoader(location);
         return fxmlLoader;
+    }
+
+    private Timeline createTimeline(double duration) {
+        Timeline timeline = new Timeline();
+        timeline.setCycleCount(((int) duration));
+
+        return timeline;
     }
 
     public Scene getScene() {

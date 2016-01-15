@@ -1,7 +1,6 @@
 package tanks;
 
-public class HumanPlayer implements IPlayer{
-    Tank tank;
+public class HumanPlayer extends Player {
 
     @Override
     public Move makeMove(Move.Movement movement, Move.Rotation rotation, boolean isShooting) {
