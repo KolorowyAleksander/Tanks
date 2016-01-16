@@ -20,9 +20,25 @@ public class Tank extends RoundGameObject {
 
     public Bullet shoot(GameObjectFactory factory) {
         timeFromLastShot = 0;
-        return factory.createBullet(getCenterX(), getCenterY(), rotationAngle, 8, 200, 100);
+        double angleInRadians = Math.toRadians(rotationAngle);
+        double gunLength = getRadius() + 2;
+        double deltaBulletX = gunLength * Math.sin(angleInRadians);
+        double deltaBulletY = gunLength * Math.cos(angleInRadians);
+        return factory.createBullet(getCenterX() + deltaBulletX, getCenterY() - deltaBulletY, rotationAngle, 4, 200, 100);
     }
 
+    public void addHealthPoints(double points) {
+        healthPoints += points;
+        if (healthPoints > maxHealthPoints) {
+            healthPoints = maxHealthPoints;
+        }
+    }
+
+    public double getHealthPoints() {
+        return healthPoints;
+    }
+
+    @Override
     public void update(double deltaTime) {
         timeFromLastShot += deltaTime;
     }

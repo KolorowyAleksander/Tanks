@@ -10,5 +10,9 @@ public class Bullet extends RoundGameObject {
         this.damage = damage;
     }
 
+    public double getDamage() {
+        return damage;
+    }
+
     public void update(double deltaTime) {}
 }

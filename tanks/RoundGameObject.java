@@ -1,24 +1,21 @@
 package tanks;
 
-import com.sun.javafx.collections.MappingChange;
-import com.sun.javafx.iio.ImageLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public abstract class RoundGameObject {
-    protected Point2D center;
+    protected Point2D position;
     protected double rotationAngle;
-    public double velocity;
-    public double angularVelocity;
+    protected double velocity;
+    protected double angularVelocity;
     protected Circle collisionBounds;
     protected Image image;
 
+    protected Point2D previousPosition;
+
     public RoundGameObject(double startX, double startY, double startDegree, double  radius, double velocity, double angularVelocity) {
-        center = new Point2D(startX, startY);
+        position = new Point2D(startX, startY);
         this.rotationAngle = startDegree;
         collisionBounds = new Circle(startX, startY, radius);
         this.velocity = velocity;
@@ -26,23 +23,30 @@ public abstract class RoundGameObject {
     }
 
     public double getCenterX() {
-        return center.getX();
+        return position.getX();
     }
 
     public double getCenterY() {
-        return center.getY();
+        return position.getY();
     }
 
+    public double getRadius() {return collisionBounds.getRadius();}
+
     public Point2D getCenterPoint() {
-        return center;
+        return position;
     }
 
     public double getRotationAngle() {return rotationAngle;}
 
+    public double getVelocity() {return velocity;}
+
+    public double getAngularVelocity() {return angularVelocity;}
+
+    public Circle getCollisionBounds() {return collisionBounds; }
+
     public Image getImage() {return image;}
 
-    public double getRadius() {return collisionBounds.getRadius();}
-
+    public Point2D getPreviousPosition() {return previousPosition;}
 
     public void rotate(Move.Rotation direction, double deltaTime) {
         switch (direction)
@@ -61,36 +65,41 @@ public abstract class RoundGameObject {
     }
 
     public void move(Move.Movement direction, double deltaTime) {
+        previousPosition = position;
+
         if (direction == Move.Movement.Staying) {
             return;
         }
 
-        double angleInRadians = Math.toRadians(rotationAngle);
+        Point2D shift = deltaOfMovement(velocity, rotationAngle, deltaTime, direction);
 
-        double dx = velocity * deltaTime * Math.sin(angleInRadians);
-        double dy = -velocity * deltaTime * Math.cos(angleInRadians);
-        if (direction == Move.Movement.Backward) {
-            dx = -dx;
-            dy = -dy;
-        }
-        center = center.add(dx, dy);
+        move(shift);
+    }
+
+    public void move(Point2D shift) {
+        position = position.add(shift);
+
         collisionBounds.setCenterX(getCenterX());
         collisionBounds.setCenterY(getCenterY());
     }
 
-    public boolean isColliding(RoundGameObject otherGameObject) {
-        Circle thisBounds = collisionBounds;
-        Circle otherBounds = otherGameObject.collisionBounds;
-        Point2D thisCenter = new Point2D(thisBounds.getCenterX(), thisBounds.getCenterY());
-        Point2D otherCenter = new Point2D(otherBounds.getCenterX(), otherBounds.getCenterX());
-        double dx = thisCenter.getX() - otherCenter.getX();
-        double dy = thisCenter.getY() - otherCenter.getY();
-        double distance = Math.sqrt(dx * dx + dy * dy);
-        double minimumDistance = collisionBounds.getRadius() + otherBounds.getRadius();
-        if (distance <= minimumDistance)
-            return true;
-        else
-            return false;
+    public Point2D deltaOfMovement(double velocity, double rotationAngle, double deltaTime, Move.Movement direction) {
+        double angleInRadians = Math.toRadians(rotationAngle);
+
+        double dx = velocity * deltaTime * Math.sin(angleInRadians);
+        double dy = -velocity * deltaTime * Math.cos(angleInRadians);
+
+        Point2D shift = new Point2D(dx, dy);
+
+        if (direction == Move.Movement.Backward){
+            shift = reverseDirection(shift);
+        }
+
+        return shift;
+    }
+
+    protected Point2D reverseDirection(Point2D shift) {
+        return new Point2D(-shift.getX(), -shift.getY());
     }
 
     public void setImage(Image image) {
