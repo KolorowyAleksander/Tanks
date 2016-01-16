@@ -1,22 +1,25 @@
 package tanks;
 
+import com.sun.javafx.collections.MappingChange;
+import com.sun.javafx.iio.ImageLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RoundGameObject {
     protected Point2D center;
     public double rotationAngle;
     public double velocity;
     public Circle collisionBounds;
-    public Image image;
+    private Image image;
 
     public RoundGameObject(double startX, double startY, double startDegree, double  radius, double velocity) {
         center = new Point2D(startX, startY);
         this.rotationAngle = startDegree;
-        collisionBounds.setCenterX(startX);
-        collisionBounds.setCenterY(startY);
-        collisionBounds.setRadius(radius);
+        collisionBounds = new Circle(startX, startY, radius);
         this.velocity = velocity;
     }
 
@@ -53,6 +56,10 @@ public class RoundGameObject {
             return true;
         else
             return false;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
     }
 
     public void update(double deltaTime) {

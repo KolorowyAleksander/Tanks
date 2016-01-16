@@ -7,10 +7,14 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.util.Duration;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 abstract public class GameState extends State {
+    protected static GameObjectFactory gameObjectFactory;
+
     protected Player players[];
 
     protected List<Bullet> bullets;
@@ -27,6 +31,8 @@ abstract public class GameState extends State {
 
     public GameState(String fxmlFileName) {
         super(fxmlFileName);
+
+        gameObjectFactory = new GameObjectFactory();
 
         bullets = new LinkedList<Bullet>();
 
@@ -65,9 +71,13 @@ abstract public class GameState extends State {
         return players[playerNumber];
     }
 
-    abstract protected void drawOnCanvas();
+    protected void drawOnCanvas() {
 
-    abstract protected void updateGame(double deltaTime);
+    }
+
+    protected void updateGame(double deltaTime) {
+
+    }
 
     public long getStartTimeInNanos() {
         return startTimeInNanos;

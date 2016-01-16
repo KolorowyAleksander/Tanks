@@ -7,6 +7,7 @@ public class Tank extends RoundGameObject {
     public double angularVelocity;
     private double shotInterval = 0.5;
     private double timeFromLastShot = 0.0;
+    private String ownerName;
 
 
     public Tank(double startX, double startY, double startDegree, double radius, double velocity, double angularVelocity) {
@@ -14,9 +15,12 @@ public class Tank extends RoundGameObject {
         this.angularVelocity = angularVelocity;
     }
 
+    public void setOwnerName(String playerName) {
+        ownerName = playerName;
+    }
+
     public Bullet shoot() {
-        Bullet bullet = new Bullet(center.getX(), center.getY(), rotationAngle, 1, 10, 100);
-        return bullet;
+        return new Bullet(center.getX(), center.getY(), rotationAngle, 1, 10, 100);
     }
 
     public void update(double deltaTime) {
@@ -28,7 +32,7 @@ public class Tank extends RoundGameObject {
         return shotInterval;
     }
 
-    public boolean isReaadyToShoot() {
+    public boolean isReadyToShoot() {
         if (timeFromLastShot >= shotInterval) {
             return true;
         }
