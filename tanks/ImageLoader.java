@@ -17,7 +17,7 @@ public class ImageLoader {
             imageAlbum.put(name, new Image(imageFileName));
         }
         catch (IllegalArgumentException exception) {
-            System.err.println(exception.getMessage());
+            System.out.println(exception.getMessage());
         }
     }
 

@@ -4,6 +4,8 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.BoxBlur;
+import javafx.scene.effect.Shadow;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -29,6 +31,7 @@ public abstract class GameStateController extends Controller {
     @FXML
     protected AnchorPane anchorPane;
 
+    protected Image backgroundImage = new Image("/assets/background.png");
 
     public GameStateController() {
         super();
@@ -38,6 +41,8 @@ public abstract class GameStateController extends Controller {
     void initialize() {
         backgroundCanvas.setWidth(gameCanvasWidth + 2 * canvasBorderWidth);
         backgroundCanvas.setHeight(gameCanvasHeight + 2 * canvasBorderWidth);
+        backgroundCanvas.setTranslateX(-canvasBorderWidth);
+        backgroundCanvas.setTranslateY(-canvasBorderWidth);
         gameCanvas.setWidth(gameCanvasWidth);
         gameCanvas.setHeight(gameCanvasHeight);
         gameCanvas.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -51,6 +56,15 @@ public abstract class GameStateController extends Controller {
     public void clearCanvas() {
         GraphicsContext graphicsContext = gameCanvas.getGraphicsContext2D();
         graphicsContext.clearRect(0, 0, gameCanvas.getWidth(), gameCanvas.getHeight());
+    }
+
+    public void drawBackground() {
+        GraphicsContext graphicsContext = gameCanvas.getGraphicsContext2D();
+        graphicsContext.save();
+        graphicsContext.setGlobalAlpha(0.6);
+        graphicsContext.setEffect(new BoxBlur(gameCanvas.getWidth(), gameCanvas.getHeight(), 0));
+        graphicsContext.drawImage(backgroundImage, 0, 0);
+        graphicsContext.restore();
     }
 
     public void drawBorder() {

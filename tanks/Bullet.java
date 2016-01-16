@@ -1,7 +1,9 @@
 package tanks;
 
+import javafx.scene.image.Image;
+
 public class Bullet extends RoundGameObject {
-    public double damage;
+    private double damage;
 
     public Bullet(double startX, double startY, double startDegree, double radius, double velocity, double damage) {
         super(startX, startY, startDegree, radius, velocity, 0);

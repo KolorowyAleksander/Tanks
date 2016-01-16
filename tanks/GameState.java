@@ -82,23 +82,33 @@ public class GameState extends State {
     protected void drawOnCanvas() {
         GameStateController gameStateController = (GameStateController)controller;
         gameStateController.clearCanvas();
+        gameStateController.drawBackground();
         gameStateController.drawBorder();
         drawTanks();
+        drawBullets();
     }
 
-    private void drawTanks() {
+    protected void drawTanks() {
         for (Player player : players) {
             Tank tank = player.getPlayerTank();
-            Image image = tank.getImage();
-            double x = tank.getCenterX();
-            double y = tank.getCenterY();
-            double rotationAngle = tank.getRotationAngle();
-            ((GameStateController)(controller)).drawRotatedImageOnGameCanvas(image, x, y, rotationAngle);
+            drawGameObjectOnCanvas(tank);
         }
+    }
+
+    protected void drawBullets() {
+        for (Bullet bullet  : bullets) {
+            drawGameObjectOnCanvas(bullet);
+        }
+    }
+
+    protected void drawGameObjectOnCanvas(RoundGameObject gameObject) {
+        ((GameStateController)(controller)).drawRotatedImageOnGameCanvas(gameObject.getImage(), gameObject.getCenterX(),
+                gameObject.getCenterY(), gameObject.getRotationAngle());
     }
 
     protected void updateGame(double deltaTime) {
         updateTanks(deltaTime);
+        updateBullets(deltaTime);
     }
 
     protected void updateTanks(double deltaTime) {
@@ -108,9 +118,16 @@ public class GameState extends State {
             playerTank.update(deltaTime);
             playerTank.rotate(playerMove.getRotation(), deltaTime);
             playerTank.move(playerMove.getMovement(), deltaTime);
-            if (playerMove.getShooting() == Move.Shooting.Shoots && playerTank.isReadyToShoot()) {
-                bullets.add(playerTank.shoot());
+            if ((playerMove.getShooting() == Move.Shooting.Shoots) && (playerTank.isReadyToShoot())) {
+                bullets.add(playerTank.shoot(gameObjectFactory));
             }
+        }
+    }
+
+    protected void updateBullets(double deltaTime) {
+        for (Bullet bullet : bullets) {
+            bullet.update(deltaTime);
+            bullet.move(Move.Movement.Forward, deltaTime);
         }
     }
 

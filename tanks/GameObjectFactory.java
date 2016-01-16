@@ -17,6 +17,7 @@ public class GameObjectFactory {
         imageEntries.put("/assets/tanks/tankGray.png", "tankGray");
         imageEntries.put("/assets/tanks/tankRudy.png", "tankRudy");
         imageEntries.put("/assets/tanks/tankWaffen.png", "tankWaffen");
+        imageEntries.put("/assets/bullet.png", "bullet");
 
         imageLoader.putMapIntoImageAlbum(imageEntries);
     }
@@ -25,7 +26,15 @@ public class GameObjectFactory {
         Tank newTank = new Tank(startX, startY, startDegree, radius, velocity, angularVelocity);
         newTank.setImage(imageLoader.getImageFromAlbum(imageName));
         newTank.setOwnerName(playerName);
+
         return newTank;
+    }
+
+    public Bullet createBullet(double startX, double startY, double startDegree, double radius, double velocity, double damage) {
+        Bullet newBullet = new Bullet(startX, startY, startDegree, radius, velocity, damage);
+        newBullet.setImage(imageLoader.getImageFromAlbum("bullet"));
+
+        return newBullet;
     }
 
     private void setImage(RoundGameObject gameObject, String name) {
