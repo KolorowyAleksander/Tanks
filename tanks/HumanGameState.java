@@ -2,12 +2,19 @@ package tanks;
 
 public class HumanGameState extends GameState {
 
-
     public HumanGameState(String fxmlFileName, String playerOneName, String playerTwoName) {
-        super(fxmlFileName);
+        super(fxmlFileName, playerOneName, playerTwoName);
 
-        players = new HumanPlayer[2];
-        players[0] = new HumanPlayer(0, playerOneName, gameObjectFactory.createTank(400, 300, 0, 64, 5, 5, "tankRudy", playerOneName));
-        players[0] = new HumanPlayer(0, playerTwoName, gameObjectFactory.createTank(400, 300, 0, 64, 5, 5, "tankWaffen", playerTwoName));
+        controller.setAssociatedState(this);
+
+        players[0] = new HumanPlayer(0, playerOneName, gameObjectFactory.createTank(startingPositions[0].getX(), startingPositions[0].getY(),
+                90, 32, 50, 50, "tankRudy", playerOneName));
+        players[1] = new HumanPlayer(0, playerTwoName, gameObjectFactory.createTank(startingPositions[1].getX(), startingPositions[1].getY(),
+                -90, 32, 50, 50, "tankWaffen", playerTwoName));
+    }
+
+    protected void updateGame(double deltaTime) {
+        ((HumanGameStateController)controller).setMovesBasedOnKeyboard();
+        super.updateGame(deltaTime);
     }
 }

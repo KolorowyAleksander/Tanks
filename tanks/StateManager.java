@@ -17,14 +17,14 @@ public class StateManager {
 
         fxmlFilesNames = new HashMap<String, String>();
         fxmlFilesNames.put("MainMenu", "/FXML/MainMenuScene.fxml");
-        fxmlFilesNames.put("Game", "/FXML/GameScene.fxml");
+        fxmlFilesNames.put("HumanGame", "/FXML/HumanGameScene.fxml");
     }
 
     public void startProgram(Stage primaryStage) {
         mainStage = primaryStage;
         mainStage.setResizable(false);
 
-        State mainMenuState = new HumanGameState(fxmlFilesNames.get("Game"), "Kuba", "Olek");
+        State mainMenuState = new HumanGameState(fxmlFilesNames.get("HumanGame"), "Kuba", "Olek");
         stateStack.push(mainMenuState);
 
         mainStage.setTitle("Tanks");

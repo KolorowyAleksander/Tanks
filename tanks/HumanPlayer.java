@@ -9,9 +9,10 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    public Move makeMove(Move.Movement movement, Move.Rotation rotation, Move.Shooting shooting) {
+    public Move makeMove() {
+        Move move = new Move(moveBuffer.getMovement(), moveBuffer.getRotation(), moveBuffer.getShooting());
         moveBuffer = new Move();
-        return new Move(movement, rotation, shooting);
+        return move;
     }
 
     public void orderInput() {} ;

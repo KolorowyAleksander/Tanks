@@ -25,4 +25,8 @@ public class Move {
     public void setMoveSection(MoveSections section, Enum value) {
         sections.put(section, value);
     }
+
+    public Movement getMovement() {return (Movement) sections.get(MoveSections.Movement);}
+    public Rotation getRotation() {return (Rotation) sections.get(MoveSections.Rotation);}
+    public Shooting getShooting() {return (Shooting) sections.get(MoveSections.Shooting);}
 }

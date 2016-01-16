@@ -9,18 +9,20 @@ import javafx.scene.shape.Circle;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RoundGameObject {
+public abstract class RoundGameObject {
     protected Point2D center;
-    public double rotationAngle;
+    protected double rotationAngle;
     public double velocity;
-    public Circle collisionBounds;
-    private Image image;
+    public double angularVelocity;
+    protected Circle collisionBounds;
+    protected Image image;
 
-    public RoundGameObject(double startX, double startY, double startDegree, double  radius, double velocity) {
+    public RoundGameObject(double startX, double startY, double startDegree, double  radius, double velocity, double angularVelocity) {
         center = new Point2D(startX, startY);
         this.rotationAngle = startDegree;
         collisionBounds = new Circle(startX, startY, radius);
         this.velocity = velocity;
+        this.angularVelocity = angularVelocity;
     }
 
     public double getCenterX() {
@@ -35,9 +37,42 @@ public class RoundGameObject {
         return center;
     }
 
-    public void move() {
-        double dx = center.getX() + velocity * Math.sin(rotationAngle);
-        double dy = center.getY() + velocity * Math.cos(rotationAngle);
+    public double getRotationAngle() {return rotationAngle;}
+
+    public Image getImage() {return image;}
+
+    public double getRadius() {return collisionBounds.getRadius();}
+
+
+    public void rotate(Move.Rotation direction, double deltaTime) {
+        switch (direction)
+        {
+            case Staying:
+                break;
+
+            case Clockwise:
+                rotationAngle += deltaTime * angularVelocity;
+                break;
+
+            case CounterClockwise:
+                rotationAngle -= deltaTime * angularVelocity;
+                break;
+        }
+    }
+
+    public void move(Move.Movement direction, double deltaTime) {
+        if (direction == Move.Movement.Staying) {
+            return;
+        }
+
+        double angleInRadians = Math.toRadians(rotationAngle);
+
+        double dx = velocity * deltaTime * Math.sin(angleInRadians);
+        double dy = -velocity * deltaTime * Math.cos(angleInRadians);
+        if (direction == Move.Movement.Backward) {
+            dx = -dx;
+            dy = -dy;
+        }
         center = center.add(dx, dy);
         collisionBounds.setCenterX(getCenterX());
         collisionBounds.setCenterY(getCenterY());
@@ -62,10 +97,6 @@ public class RoundGameObject {
         this.image = image;
     }
 
-    public void update(double deltaTime) {
-        double deltaX = velocity * Math.cos(rotationAngle) * deltaTime;
-        double deltaY = velocity * Math.sin(rotationAngle) * deltaTime;
-        center.add(deltaX, deltaY);
-    }
+    abstract public void update(double deltaTime);
 
 }

@@ -10,16 +10,20 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.transform.Rotate;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class GameStateController extends Controller {
-    protected GameState gameState;
-
+public abstract class GameStateController extends Controller {
     @FXML
     protected Canvas gameCanvas;
 
+    @FXML
+    protected Canvas backgroundCanvas;
+
+    final private double gameCanvasWidth = 800;
+    final private double gameCanvasHeight = 600;
     final private double canvasBorderWidth = 10;
 
     @FXML
@@ -28,17 +32,14 @@ public class GameStateController extends Controller {
 
     public GameStateController() {
         super();
-        gameState = (GameState)associatedState;
     }
 
     @FXML
     void initialize() {
-        gameCanvas.setHeight(600);
-        gameCanvas.setWidth(800);
-        GraphicsContext gc = gameCanvas.getGraphicsContext2D();
-        gc.setFill(Color.BLACK);
-        gc.setLineWidth(10);
-        gc.strokeRect(0, 0, gameCanvas.getWidth(), gameCanvas.getHeight());
+        backgroundCanvas.setWidth(gameCanvasWidth + 2 * canvasBorderWidth);
+        backgroundCanvas.setHeight(gameCanvasHeight + 2 * canvasBorderWidth);
+        gameCanvas.setWidth(gameCanvasWidth);
+        gameCanvas.setHeight(gameCanvasHeight);
         gameCanvas.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -47,10 +48,32 @@ public class GameStateController extends Controller {
         });
     }
 
+    public void clearCanvas() {
+        GraphicsContext graphicsContext = gameCanvas.getGraphicsContext2D();
+        graphicsContext.clearRect(0, 0, gameCanvas.getWidth(), gameCanvas.getHeight());
+    }
+
+    public void drawBorder() {
+        GraphicsContext graphicsContext = backgroundCanvas.getGraphicsContext2D();
+        graphicsContext.setFill(Color.BLACK);
+        graphicsContext.setLineWidth(canvasBorderWidth);
+        graphicsContext.strokeRect(canvasBorderWidth / 2, canvasBorderWidth / 2, backgroundCanvas.getWidth() - canvasBorderWidth,
+                backgroundCanvas.getHeight() - canvasBorderWidth);
+    }
+
+    public void drawRotatedImageOnGameCanvas(Image image, double centerX, double centerY, double angle) {
+        drawRotatedImage(gameCanvas.getGraphicsContext2D(), image, centerX, centerY, angle);
+    }
+
     protected void drawRotatedImage(GraphicsContext graphicsContext, Image image, double x, double y, double angle) {
         graphicsContext.save();
-        graphicsContext.rotate(angle);
-        graphicsContext.drawImage(image, x, y);
+        rotate(graphicsContext, angle, x, y);
+        graphicsContext.drawImage(image, x - image.getWidth() / 2, y - image.getHeight() / 2);
         graphicsContext.restore();
+    }
+
+    private void rotate(GraphicsContext gc, double angle, double px, double py) {
+        Rotate r = new Rotate(angle, px, py);
+        gc.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
     }
 }

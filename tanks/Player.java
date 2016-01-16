@@ -11,8 +11,9 @@ public abstract class Player {
         this.tank = tank;
     }
 
-    abstract public Move makeMove(Move.Movement movement, Move.Rotation rotation, Move.Shooting shooting);
+    abstract public Move makeMove();
 
+    public Tank getPlayerTank() {return tank; }
     public int getPlayerNumber() {
         return playerNumber;
     }

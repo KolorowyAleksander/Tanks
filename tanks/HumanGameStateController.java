@@ -1,5 +1,7 @@
 package tanks;
 
+import javafx.animation.Timeline;
+import javafx.beans.binding.BooleanExpression;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
@@ -9,14 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HumanGameStateController extends GameStateController {
-    private HumanGameState humanGameState;
-
-    public HumanGameStateController() {
-        super();
-        humanGameState = (HumanGameState) gameState;
-        initializeKeyboardKeyBindingMap();
-    }
-
     private class KeyboardKeyBinding {
         int playerNumber;
         Move.MoveSections moveSection;
@@ -27,9 +21,21 @@ public class HumanGameStateController extends GameStateController {
             this.moveSection = section;
             this.value = value;
         }
+
+        public String toString() {
+            return "Player #" + playerNumber + ", move section: " + moveSection + ", value: " + value;
+        }
     }
 
+    Map<KeyCode, Boolean> isKeyPressedHashMap;
+
     private Map<KeyCode, KeyboardKeyBinding> keyboardKeyBindingMap;
+
+    public HumanGameStateController() {
+        super();
+        initializeKeyboardKeyBindingMap();
+        initializeIsKeyPressedHashMap();
+    }
 
     private void initializeKeyboardKeyBindingMap() {
         keyboardKeyBindingMap = new HashMap<KeyCode, KeyboardKeyBinding>();
@@ -47,17 +53,61 @@ public class HumanGameStateController extends GameStateController {
         keyboardKeyBindingMap.put(KeyCode.V, new KeyboardKeyBinding(1, Move.MoveSections.Shooting, Move.Shooting.Shoots));
     }
 
-    private final EventHandler<KeyEvent> keyEventHandler = new EventHandler<KeyEvent> () {
+    private void initializeIsKeyPressedHashMap() {
+        isKeyPressedHashMap = new HashMap<KeyCode, Boolean>();
+
+        isKeyPressedHashMap.put(KeyCode.UP, false);
+        isKeyPressedHashMap.put(KeyCode.DOWN, false);
+        isKeyPressedHashMap.put(KeyCode.LEFT, false);
+        isKeyPressedHashMap.put(KeyCode.RIGHT, false);
+        isKeyPressedHashMap.put(KeyCode.NUMPAD2, false);
+
+        isKeyPressedHashMap.put(KeyCode.W, false);
+        isKeyPressedHashMap.put(KeyCode.S, false);
+        isKeyPressedHashMap.put(KeyCode.A, false);
+        isKeyPressedHashMap.put(KeyCode.D, false);
+        isKeyPressedHashMap.put(KeyCode.V, false);
+    }
+
+    private final EventHandler<KeyEvent> keyPressedEventHandler = new EventHandler<KeyEvent> () {
         public void handle(final KeyEvent keyEvent) {
-            KeyboardKeyBinding keyboardKeyBinding = keyboardKeyBindingMap.get(keyEvent);
-            HumanPlayer player = (HumanPlayer) gameState.getPlayer(keyboardKeyBinding.playerNumber);
-            player.setMoveBufferSection(keyboardKeyBinding.moveSection, keyboardKeyBinding.value);
+            searchForKeyCodeAndSet(keyEvent, true);
         }
     };
+
+    private final EventHandler<KeyEvent> keyReleasedEventHandler = new EventHandler<KeyEvent> () {
+        public void handle(final KeyEvent keyEvent) {
+            searchForKeyCodeAndSet(keyEvent, false);
+        }
+    };
+
+    private void searchForKeyCodeAndSet(KeyEvent keyEvent, Boolean bool) {
+        KeyCode keyCode = keyEvent.getCode();
+        System.out.println(keyCode + " pressed/released");
+        if (isKeyPressedHashMap.containsKey(keyCode)) {
+            isKeyPressedHashMap.put(keyCode, bool);
+        }
+
+    }
+
+    public void setMovesBasedOnKeyboard() {
+        KeyboardKeyBinding keyboardKeyBinding;
+        KeyCode keyCode;
+        HumanGameState humanGameState = (HumanGameState)associatedState;
+        for (Map.Entry<KeyCode, Boolean> entry : isKeyPressedHashMap.entrySet()) {
+            if (entry.getValue() == true) {
+                keyCode = entry.getKey();
+                keyboardKeyBinding = keyboardKeyBindingMap.get(keyCode);
+                HumanPlayer player = (HumanPlayer)humanGameState.getPlayer(keyboardKeyBinding.playerNumber);
+                player.setMoveBufferSection(keyboardKeyBinding.moveSection, keyboardKeyBinding.value);
+            }
+        }
+    }
 
     @FXML
     void initialize() {
         super.initialize();
-        root.setOnKeyPressed(keyEventHandler);
+        root.setOnKeyPressed(keyPressedEventHandler);
+        root.setOnKeyReleased(keyReleasedEventHandler);
     }
 }

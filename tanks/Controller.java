@@ -8,7 +8,7 @@ import javafx.fxml.*;
 import javafx.scene.Parent;
 import javafx.scene.input.KeyEvent;
 
-abstract public class Controller {
+public abstract class Controller {
     protected State associatedState;
 
     @FXML
