@@ -69,7 +69,7 @@ public abstract class GameStateController extends Controller {
 
     public void drawBorder() {
         GraphicsContext graphicsContext = backgroundCanvas.getGraphicsContext2D();
-        graphicsContext.setFill(Color.BLACK);
+        graphicsContext.setFill(Color.GREEN);
         graphicsContext.setLineWidth(canvasBorderWidth);
         graphicsContext.strokeRect(canvasBorderWidth / 2, canvasBorderWidth / 2, backgroundCanvas.getWidth() - canvasBorderWidth,
                 backgroundCanvas.getHeight() - canvasBorderWidth);
