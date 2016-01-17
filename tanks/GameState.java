@@ -11,7 +11,7 @@ import javafx.util.Duration;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public abstract class GameState extends State {
+public class GameState extends State {
     protected static GameObjectFactory gameObjectFactory;
     protected static CollisionChecker collisionChecker;
 
@@ -305,5 +305,7 @@ public abstract class GameState extends State {
         return false;
     }
 
-    abstract protected void endGame();
+    protected void endGame() {
+        gameLoopInfiniteTimeline.stop();
+    }
 }

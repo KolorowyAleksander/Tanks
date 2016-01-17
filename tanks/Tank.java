@@ -3,7 +3,7 @@ package tanks;
 public class Tank extends RoundGameObject {
     private final static double maxHealthPoints = 1000.0;
     private double healthPoints = 1000.0;
-    public double rangeOfVision = 30.0;
+    private double rangeOfVision = 30.0;
     private double shotInterval = 1.0;
     private double timeFromLastShot = 0.0;
     private String ownerName;
@@ -56,5 +56,9 @@ public class Tank extends RoundGameObject {
         else {
             return false;
         }
+    }
+
+    public double getRangeOfVision() {
+        return rangeOfVision;
     }
 }

@@ -1,8 +1,7 @@
 package tanks;
 
-public class HumanGameState extends GameState {
-
-    public HumanGameState(StateManager stateManager, String fxmlFileName, String playerOneName, String playerTwoName) {
+public class AIGameState extends GameState {
+    public AIGameState(StateManager stateManager, String fxmlFileName, String playerOneName, String playerTwoName) {
         super(stateManager, fxmlFileName, playerOneName, playerTwoName);
 
         players[0] = new HumanPlayer(0, playerOneName, gameObjectFactory.createTank(startingPositions[0].getX(), startingPositions[0].getY(),
@@ -17,8 +16,10 @@ public class HumanGameState extends GameState {
     }
 
     protected void draw() {
+        ((AIGameStateController)controller).drawVisionLines(new Tank[]{players[0].getPlayerTank(), players[1].getPlayerTank()});
         super.draw();
     }
+
 
     protected void endGame() {
         super.endGame();
