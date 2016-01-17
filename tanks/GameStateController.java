@@ -4,6 +4,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
@@ -25,6 +26,10 @@ public abstract class GameStateController extends Controller {
     protected Label playerOneName;
     @FXML
     protected Label playerTwoName;
+    @FXML
+    protected Button pauseGameButton;
+    @FXML
+    protected Button exitGameButton;
 
     final private double gameCanvasWidth = 800;
     final private double gameCanvasHeight = 600;
@@ -75,17 +80,16 @@ public abstract class GameStateController extends Controller {
 
         gameCanvas.setWidth(gameCanvasWidth);
         gameCanvas.setHeight(gameCanvasHeight);
-        gameCanvas.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                System.out.println(System.nanoTime() - ((GameState) associatedState).getStartTimeInNanos());
-            }
-        });
 
         playerOneHealthBar = new HealthBar(0, 200, playerDataWidth, healthBarHeight, playerOneHPCanvas);
         playerTwoHealthBar = new HealthBar(916, 200, playerDataWidth, healthBarHeight, playerTwoHPCanvas);
 
-
+        exitGameButton.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                associatedState.stateManager.popOutOfStateStack();
+            }
+        });
     }
 
     public void clearCanvas() {
@@ -125,7 +129,7 @@ public abstract class GameStateController extends Controller {
 
     public void drawPlayerHealthBar(int playerNumber, double healthPoints, double maxHealthPoints) {
         HealthBar healthBar;
-        if (playerNumber == 1) {
+        if (playerNumber == 0) {
             healthBar = playerOneHealthBar;
         }
         else{

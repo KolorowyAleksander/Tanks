@@ -11,7 +11,7 @@ import javafx.util.Duration;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class GameState extends State {
+public abstract class GameState extends State {
     protected static GameObjectFactory gameObjectFactory;
     protected static CollisionChecker collisionChecker;
 
@@ -22,7 +22,7 @@ public class GameState extends State {
 
     protected EventHandler<ActionEvent> gameLoop;
 
-    private Timeline gameLoopInfiniteTimeline;
+    protected Timeline gameLoopInfiniteTimeline;
 
     protected long startTimeInNanos;
     protected long currentTimeInNanos;
@@ -33,8 +33,8 @@ public class GameState extends State {
     protected double damageOnTanksCollision = 100.0;
     protected static final Point2D startingPositions[] = {new Point2D(200, 300), new Point2D(600, 300)};
 
-    public GameState(String fxmlFileName, String playerOneName, String playerTwoName) {
-        super(fxmlFileName);
+    public GameState(StateManager stateManager, String fxmlFileName, String playerOneName, String playerTwoName) {
+        super(stateManager, fxmlFileName);
 
         gameObjectFactory = new GameObjectFactory();
         collisionChecker = new CollisionChecker(fieldWidth, fieldHeight);
@@ -70,6 +70,9 @@ public class GameState extends State {
                 currentTimeInNanos = newTimeInNanos;
                 updateGame(deltaTime);
                 draw();
+                if (checkWhetherTheGameIsOver()) {
+                    endGame();
+                }
             }
         };
 
@@ -117,13 +120,13 @@ public class GameState extends State {
         updateBullets(deltaTime);
         checkCollisions();
         deleteBulletsOutsideOfBorders();
+        checkWhetherTheGameIsOver();
     }
 
     protected void updateTanks(double deltaTime) {
         for (Player player : players) {
             Move playerMove = player.makeMove();
             Tank playerTank = player.getPlayerTank();
-            System.out.println("Player #" + player.getPlayerNumber() + ", HP = " + playerTank.getHealthPoints());
 
             playerTank.update(deltaTime);
 
@@ -157,9 +160,7 @@ public class GameState extends State {
         for (RoundGameObject gameObjectA : gameObjects) {
             for (RoundGameObject gameObjectB : gameObjects) {
                 if (gameObjectA != gameObjectB) {
-                    System.out.println(gameObjectA.getClass().toString() + " checking collision with " + gameObjectB.getClass().toString());
                     if (collisionChecker.isColliding(gameObjectA, gameObjectB)) {
-                        System.out.println(gameObjectA.getClass().toString() + " collided with " + gameObjectB.getClass().toString());
                         onCollision(gameObjectA, gameObjectB);
                     }
                 }
@@ -269,7 +270,7 @@ public class GameState extends State {
 
             case 3:
                 newCenterX = radius;
-                newCenterY = crossPoint.getY() + (radius / a);
+                newCenterY = crossPoint.getY() + (radius * a);
         }
 
         return new Point2D(newCenterX, newCenterY);
@@ -293,4 +294,16 @@ public class GameState extends State {
     public long getStartTimeInNanos() {
         return startTimeInNanos;
     }
+
+
+    private boolean checkWhetherTheGameIsOver() {
+        for(Player player : players) {
+            if(player.getPlayerTank().getHealthPoints() <= 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    abstract protected void endGame();
 }

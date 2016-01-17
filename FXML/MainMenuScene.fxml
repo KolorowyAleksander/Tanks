@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<VBox id="background" fx:id="root" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" spacing="50.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="tanks.MainMenuStateController">
+  <children>
+    <Button id="big-red-button" fx:id="startHumanGameButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="57.0" prefWidth="252.0" text="Human Game">
+      <stylesheets>
+        <URL value="@../CSS/main.css" />
+      </stylesheets>
+      <VBox.margin>
+        <Insets />
+      </VBox.margin>
+    </Button>
+    <Button id="big-red-button" fx:id="startAITournamentButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="57.0" prefWidth="252.0" text="AI Tournament">
+      <stylesheets>
+        <URL value="@../CSS/main.css" />
+      </stylesheets>
+    </Button>
+    <Button id="big-red-button" fx:id="exitGameButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="57.0" prefWidth="252.0" text="Exit">
+      <stylesheets>
+        <URL value="@../CSS/main.css" />
+      </stylesheets>
+    </Button>
+  </children>
+  <stylesheets>
+    <URL value="@../CSS/main.css" />
+  </stylesheets>
+</VBox>

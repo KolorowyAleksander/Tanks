@@ -24,4 +24,8 @@ public abstract class Controller {
 
     @FXML
     abstract void initialize();
+
+    protected void exitGame() {
+        associatedState.stateManager.closeProgram();
+    }
 }

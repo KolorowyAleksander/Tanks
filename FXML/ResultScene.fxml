@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<VBox id="background" fx:id="root" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" spacing="50.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="tanks.ResultStateController">
+  <children>
+    <Label id="transparent-label" fx:id="winnerStatementLabel" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="361.0" prefWidth="800.0" text="Player One have won !" textAlignment="CENTER" textFill="#990000" wrapText="true">
+      <font>
+        <Font name="Arial Bold" size="120.0" />
+      </font>
+      <stylesheets>
+        <URL value="@../CSS/main.css" />
+      </stylesheets>
+    </Label>
+    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+      <children>
+        <Button id="big-red-button" fx:id="mainMenuButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="57.0" prefWidth="252.0" text="Main Menu">
+          <stylesheets>
+            <URL value="@../CSS/main.css" />
+          </stylesheets>
+        </Button>
+        <Button id="big-red-button" fx:id="exitButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="57.0" prefWidth="252.0" text="Exit Game">
+          <stylesheets>
+            <URL value="@../CSS/main.css" />
+          </stylesheets>
+        </Button>
+      </children>
+    </HBox>
+  </children>
+  <stylesheets>
+    <URL value="file:/C:/Users/Kuba/Studia/PROGRAMY/Programowanie%20obiektowe/Tanks/src/CSS/main.css" />
+  </stylesheets>
+</VBox>

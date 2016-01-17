@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 
 public class MainMenuState extends State {
 
-    public MainMenuState(String fxmlFileName) {
-        super(fxmlFileName);
+    public MainMenuState(StateManager stateManager, String fxmlFileName) {
+        super(stateManager, fxmlFileName);
     }
 }

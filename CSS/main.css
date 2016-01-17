@@ -27,7 +27,7 @@
     -fx-text-fill: #6b6b6b;
 }
 
-#bordered-vbox
+#background
 {
     -fx-border-color: #000000;
     -fx-border-width: 10px;
@@ -38,4 +38,9 @@
 #army-label
 {
     -fx-background-image: url(/assets/css/button2.png);
+}
+
+#transparent-label
+{
+	-fx-background-color: rgba(255, 255, 255, 0.4);
 }

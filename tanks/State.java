@@ -15,10 +15,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class State{
+    protected StateManager stateManager;
     protected Scene scene;
     protected Controller controller;
 
-    public State(String fxmlFileName) {
+    public State(StateManager stateManager, String fxmlFileName) {
+        this.stateManager = stateManager;
+
         FXMLLoader fxmlLoader = createFXMLLoader(fxmlFileName);
 
         try {
@@ -38,7 +41,7 @@ public class State{
         controller.setAssociatedState(this);
 
         Parent root = controller.getRoot();
-        scene = new Scene(root, root.prefWidth(0), root.prefHeight(0));
+        scene = new Scene(root);
     }
 
     private FXMLLoader createFXMLLoader(String fxmlFileName) {
