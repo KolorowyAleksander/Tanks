@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -12,6 +13,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         StateManager stateManager = new StateManager();
         stateManager.startProgram(primaryStage);
+        primaryStage.getIcons().add(new Image("/assets/tanks/tank.png"));
     }
 
 
