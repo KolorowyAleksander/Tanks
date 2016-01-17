@@ -18,7 +18,6 @@
     -fx-padding: 15 30 15 30;
     -fx-font-family: "Arial";
     -fx-font-size: 22px;
-
 }
 
 #big-red-button:hover
@@ -36,3 +35,7 @@
     -fx-background-image: url(/assets/css/background_image.png);
 }
 
+#army-label
+{
+    -fx-background-image: url(/assets/css/button2.png);
+}

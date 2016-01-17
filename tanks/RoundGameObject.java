@@ -83,6 +83,13 @@ public abstract class RoundGameObject {
         collisionBounds.setCenterY(getCenterY());
     }
 
+    public void moveTo(Point2D newPosition) {
+        position = newPosition;
+
+        collisionBounds.setCenterX(getCenterX());
+        collisionBounds.setCenterY(getCenterY());
+    }
+
     public Point2D deltaOfMovement(double velocity, double rotationAngle, double deltaTime, Move.Movement direction) {
         double angleInRadians = Math.toRadians(rotationAngle);
 

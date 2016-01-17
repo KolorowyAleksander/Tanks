@@ -1,8 +1,8 @@
 package tanks;
 
 public class Tank extends RoundGameObject {
-    public final static double maxHealthPoints = 1000.0;
-    public double healthPoints = 1000.0;
+    private final static double maxHealthPoints = 1000.0;
+    private double healthPoints = 1000.0;
     public double rangeOfVision = 30.0;
     private double shotInterval = 1.0;
     private double timeFromLastShot = 0.0;
@@ -37,6 +37,8 @@ public class Tank extends RoundGameObject {
     public double getHealthPoints() {
         return healthPoints;
     }
+
+    public static double getMaxHealthPoints() {return maxHealthPoints;}
 
     @Override
     public void update(double deltaTime) {

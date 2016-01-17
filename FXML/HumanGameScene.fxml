@@ -9,6 +9,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
 
 <GridPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="tanks.HumanGameStateController">
   <children>
@@ -34,12 +35,21 @@
             <Insets />
           </VBox.margin>
         </HBox>
-        <AnchorPane fx:id="anchorPane" id="AnchorPane" minHeight="600.0" minWidth="800.0" prefHeight="600.0" prefWidth="800.0">
+        <AnchorPane id="AnchorPane" fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="800.0" prefHeight="600.0" prefWidth="1024.0">
           <children>
             <Canvas fx:id="backgroundCanvas" rotate="0.0" scaleX="1.0" scaleY="1.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="105.0" AnchorPane.rightAnchor="-105.0" AnchorPane.topAnchor="0.0" />
-          </children>
-          <children>
             <Canvas fx:id="gameCanvas" rotate="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="105.0" AnchorPane.rightAnchor="-105.0" AnchorPane.topAnchor="0.0" />
+            <Canvas id="" fx:id="playerOneHPCanvas" rotate="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <Canvas id="" fx:id="playerTwoHPCanvas" rotate="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <Label id="army-label" fx:id="playerOneName" alignment="CENTER" layoutX="0.0" layoutY="75.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="90.0" text="Label" textAlignment="CENTER" textFill="RED" wrapText="true">
+              <font>
+                <Font name="Arial Bold" size="18.0" fx:id="x2" />
+              </font>
+              <stylesheets>
+                <URL value="@../CSS/main.css" />
+              </stylesheets>
+            </Label>
+            <Label id="army-label" fx:id="playerTwoName" alignment="CENTER" font="$x2" layoutX="916.0" layoutY="75.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="90.0" text="Label" textAlignment="CENTER" textFill="RED" wrapText="true" />
           </children>
         </AnchorPane>
       </children>

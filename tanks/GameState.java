@@ -6,11 +6,9 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
-import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
-import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class GameState extends State {
@@ -71,7 +69,7 @@ public class GameState extends State {
                 double deltaTime = (double)(newTimeInNanos - currentTimeInNanos) / 1000000000.0;
                 currentTimeInNanos = newTimeInNanos;
                 updateGame(deltaTime);
-                drawOnCanvas();
+                draw();
             }
         };
 
@@ -82,13 +80,18 @@ public class GameState extends State {
         return players[playerNumber];
     }
 
-    protected void drawOnCanvas() {
+    protected void draw() {
         GameStateController gameStateController = (GameStateController)controller;
         gameStateController.clearCanvas();
         gameStateController.drawBackground();
         gameStateController.drawBorder();
         drawTanks();
         drawBullets();
+        drawPlayersData();
+    }
+
+    protected void drawPlayersData() {
+        ((GameStateController)controller).drawPlayersData(players);
     }
 
     protected void drawTanks() {
@@ -175,19 +178,31 @@ public class GameState extends State {
             final double shiftMultiplier = 2;
 
             ((Tank) gameObjectA).addHealthPoints(-damageOnTanksCollision);
-            ((Tank) gameObjectA).addHealthPoints(-damageOnTanksCollision);
+            ((Tank) gameObjectB).addHealthPoints(-damageOnTanksCollision);
 
             Point2D centerA = gameObjectA.getCenterPoint();
             Point2D centerB = gameObjectB.getCenterPoint();
 
             Point2D center = centerA.midpoint(centerB);
 
-            Point2D newCenterA = centerA.add(center).multiply(shiftMultiplier);
-            Point2D newCenterB = centerB.add(center).multiply(shiftMultiplier);
+            Point2D shiftVector = centerA.add(center.multiply(-1));
 
-            if (!collisionChecker.isCircleInsideOfBoundaries(new Circle(newCenterA.getX(), newCenterA.getY(), gameObjectA.getRadius()))) {
+            Point2D newCenterA = centerA.add(shiftVector.multiply(shiftMultiplier));
+            Point2D newCenterB = centerB.add(shiftVector.multiply(-shiftMultiplier));
+
+            if (collisionChecker.isCircleInsideOfBoundaries(new Circle(newCenterA.getX(), newCenterA.getY(), gameObjectA.getRadius()))) {
+                gameObjectA.moveTo(newCenterA);
+            }
+            else {
+                gameObjectA.moveTo(shiftPointOnTankCollision(centerA, center, gameObjectA.getRadius()));
             }
 
+            if (collisionChecker.isCircleInsideOfBoundaries(new Circle(newCenterB.getX(), newCenterB.getY(), gameObjectB.getRadius()))) {
+                gameObjectB.moveTo(newCenterB);
+            }
+            else {
+                gameObjectB.moveTo(shiftPointOnTankCollision(centerB, center, gameObjectB.getRadius()));
+            }
         }
         else if (gameObjectA instanceof Tank && gameObjectB instanceof Bullet) {
             ((Tank) gameObjectA).addHealthPoints(-((Bullet) gameObjectB).getDamage());
@@ -207,7 +222,7 @@ public class GameState extends State {
         }
     }
 
-    protected Point2D shiftPointOnTankCollision(Point2D currentPosition, Point2D center) {
+    protected Point2D shiftPointOnTankCollision(Point2D currentPosition, Point2D center, double radius) {
         double posX = currentPosition.getX(), posY = currentPosition.getY();
         double centerX = center.getX(), centerY = center.getY();
 
@@ -222,17 +237,42 @@ public class GameState extends State {
         possibleShiftPoints[3] = new Point2D(0, b);
 
         double distances[] = new double[4];
-        double maximumDistance = 0;
-        int maximumIndex = 0;
+        double minimumDistance = Double.MAX_VALUE;
+        int minimumIndex = 0;
         for (int i = 0; i < 4; i++) {
             distances[i] = currentPosition.distance(possibleShiftPoints[i]);
-            if (distances[i] > maximumDistance) {
-                maximumDistance = distances[i];
-                maximumIndex = i;
+            if (distances[i] < minimumDistance) {
+                minimumDistance = distances[i];
+                minimumIndex = i;
             }
         }
 
-        return possibleShiftPoints[maximumIndex];
+        Point2D crossPoint = possibleShiftPoints[minimumIndex];
+
+        double newCenterX = 0, newCenterY = 0;
+
+        switch(minimumIndex) {
+            case 0:
+                newCenterX = crossPoint.getX() + (radius / a);
+                newCenterY = radius;
+                break;
+
+            case 1:
+                newCenterX = fieldWidth - radius;
+                newCenterY = crossPoint.getY() - (radius * a);
+                break;
+
+            case 2:
+                newCenterX = crossPoint.getX() - (radius / a);
+                newCenterY = fieldHeight - radius;
+                break;
+
+            case 3:
+                newCenterX = radius;
+                newCenterY = crossPoint.getY() + (radius / a);
+        }
+
+        return new Point2D(newCenterX, newCenterY);
     }
 
     public static void swap(Object objectA, Object objectB) {

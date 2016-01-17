@@ -24,7 +24,7 @@ public class StateManager {
         mainStage = primaryStage;
         mainStage.setResizable(false);
 
-        State mainMenuState = new HumanGameState(fxmlFilesNames.get("HumanGame"), "Kuba", "Olek");
+        State mainMenuState = new HumanGameState(fxmlFilesNames.get("HumanGame"), "Player One", "Player Two");
         stateStack.push(mainMenuState);
 
         mainStage.setTitle("Tanks");
