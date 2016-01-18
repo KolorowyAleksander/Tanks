@@ -22,6 +22,14 @@ public abstract class RoundGameObject {
         this.angularVelocity = angularVelocity;
     }
 
+    public RoundGameObject(RoundGameObject otherObject) {
+        this.position = new Point2D(otherObject.getCenterX(), otherObject.getCenterY());
+        this.rotationAngle = otherObject.getRotationAngle();
+        this.collisionBounds = new Circle(otherObject.getCenterX(), otherObject.getCenterY(), otherObject.getRadius());
+        this.velocity = otherObject.getVelocity();
+        this.angularVelocity = otherObject.getAngularVelocity();
+    }
+
     public double getCenterX() {
         return position.getX();
     }
@@ -61,6 +69,12 @@ public abstract class RoundGameObject {
             case CounterClockwise:
                 rotationAngle -= deltaTime * angularVelocity;
                 break;
+        }
+        if (rotationAngle < 0) {
+            rotationAngle += 360;
+        }
+        if (rotationAngle > 360) {
+            rotationAngle -= 360;
         }
     }
 

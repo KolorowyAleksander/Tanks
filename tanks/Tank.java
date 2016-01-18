@@ -8,10 +8,16 @@ public class Tank extends RoundGameObject {
     private double timeFromLastShot = 0.0;
     private String ownerName;
 
+    {
+        timeFromLastShot = shotInterval;
+    }
 
     public Tank(double startX, double startY, double startDegree, double radius, double velocity, double angularVelocity) {
         super(startX, startY, startDegree, radius, velocity, angularVelocity);
-        timeFromLastShot = shotInterval;
+    }
+
+    public Tank(Tank otherTank) {
+        super(otherTank);
     }
 
     public void setOwnerName(String playerName) {
