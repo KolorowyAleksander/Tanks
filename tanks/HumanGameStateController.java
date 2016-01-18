@@ -83,7 +83,6 @@ public class HumanGameStateController extends GameStateController {
 
     private void searchForKeyCodeAndSet(KeyEvent keyEvent, Boolean bool) {
         KeyCode keyCode = keyEvent.getCode();
-        System.out.println(keyCode + " pressed/released");
         if (isKeyPressedHashMap.containsKey(keyCode)) {
             isKeyPressedHashMap.put(keyCode, bool);
         }

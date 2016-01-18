@@ -68,6 +68,7 @@ public class GameState extends State {
                 long newTimeInNanos = System.nanoTime();
                 double deltaTime = (double)(newTimeInNanos - currentTimeInNanos) / 1000000000.0;
                 currentTimeInNanos = newTimeInNanos;
+                System.out.print(currentTimeInNanos);
                 updateGame(deltaTime);
                 draw();
                 if (checkWhetherTheGameIsOver()) {
@@ -332,7 +333,6 @@ public class GameState extends State {
                 bullets.remove(bullet);
             }
         }
-        System.out.println(bullets.size());
     }
 
     public long getStartTimeInNanos() {
@@ -347,6 +347,15 @@ public class GameState extends State {
             }
         }
         return false;
+    }
+
+    protected void pauseGame() {
+        gameLoopInfiniteTimeline.pause();
+    }
+
+    protected void unpauseGame() {
+        currentTimeInNanos = System.nanoTime();
+        gameLoopInfiniteTimeline.play();
     }
 
     protected void endGame() {

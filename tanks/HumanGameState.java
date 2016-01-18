@@ -21,7 +21,17 @@ public class HumanGameState extends GameState {
     }
 
     protected void endGame() {
+        double playerOneHealth = players[0].getPlayerTank().getHealthPoints();
+        double playerTwoHealth = players[1].getPlayerTank().getHealthPoints();
+        Player winner;
+        if (playerOneHealth >= playerTwoHealth) {
+            winner = players[0];
+        }
+        else {
+            winner = players[1];
+        }
+
         super.endGame();
-        stateManager.pushOnStateStack(new ResultState(stateManager, stateManager.getFXMLFileName("ResultsScene"), "Player one"));
+        stateManager.pushOnStateStack(new ResultState(stateManager, stateManager.getFXMLFileName("ResultsScene"), winner.getPlayerName()));
     }
 }

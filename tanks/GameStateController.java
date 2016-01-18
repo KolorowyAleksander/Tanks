@@ -29,6 +29,7 @@ public abstract class GameStateController extends Controller {
     protected Label playerTwoName;
     @FXML
     protected Button pauseGameButton;
+    protected boolean isGamePaused = false;
     @FXML
     protected Button exitGameButton;
 
@@ -88,7 +89,25 @@ public abstract class GameStateController extends Controller {
         exitGameButton.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                associatedState.stateManager.popOutOfStateStack();
+                exitGame();
+            }
+        });
+
+        pauseGameButton.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                GameState gameState = ((GameState)associatedState);
+                String text = pauseGameButton.getText();
+                if (isGamePaused == false) {
+                    isGamePaused = true;
+                    gameState.pauseGame();
+                    pauseGameButton.setText("Unpause");
+                }
+                else if (isGamePaused == true) {
+                    isGamePaused = false;
+                    gameState.unpauseGame();
+                    pauseGameButton.setText("Pause");
+                }
             }
         });
     }
