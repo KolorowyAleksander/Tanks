@@ -292,7 +292,7 @@ public class GameState extends State {
 
     protected SystemSides findSystemSide(Point2D point, double rotationAngleInDegrees, double fieldWidth, double fieldHeight) {
         double centerX = point.getX(), centerY = point.getY();
-        double angle = rotationAngleInDegrees % 360;
+        double angle = (rotationAngleInDegrees +360) % 360;
 
         double angleLimits[] = new double[4];
         angleLimits[0] = Math.atan2(-centerY, fieldWidth - centerX);
