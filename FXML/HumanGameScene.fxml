@@ -47,7 +47,7 @@
             <URL value="@../CSS/main.css" />
           </stylesheets>
           <textFill>
-            <Color blue="0.000" green="0.000" red="0.600" fx:id="x3" />
+            <Color blue="0.000" green="0.000" red="0.000" fx:id="x3" />
           </textFill>
         </Label>
         <Label id="army-label" fx:id="playerTwoName" alignment="CENTER" font="$x2" layoutX="916.0" layoutY="75.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="90.0" text="Label" textAlignment="CENTER" textFill="$x3" wrapText="true" />
