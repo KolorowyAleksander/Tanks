@@ -1,40 +1,63 @@
 package tanks;
 
+import java.util.List;
+
 public class OlekAI extends ArtificialPlayer {
-    private final static double changeMovementTime = 2.0, changeRotationTime = 0.5;
-    private double lastChangingOfMovement = 0.0, lastChangingOfRotation = 0.0;
 
     private Move.Movement currentMovement;
     private Move.Rotation currentRotation;
 
-    public OlekAI (int playerNumber, String playerName, Tank tank) {
+    private double myX;
+    private double myY;
+    private double enemyX;
+    private double enemyY;
+
+    public OlekAI(int playerNumber, String playerName, Tank tank) {
         super(playerNumber, playerName, tank);
     }
 
-    public static Move.Movement getRandomMovement() {
-        return Move.Movement.values()[(int)(Math.random() * Move.Movement.values().length)];
+    private boolean seeTank() {
+        for (RoundGameObject element : visibleObjectsBuffer) {
+            if (element instanceof Tank) {
+                enemyX = element.getCenterX();
+                enemyY = element.getCenterY();
+                enemyY = element.getCenterY();
+                return true;
+            }
+        }
+        return false;
     }
 
-    public static Move.Rotation getRandomRotation() {
-        return Move.Rotation.values()[(int)(Math.random() * Move.Rotation.values().length)];
-    }
+    private double countAlpha(double enemyX, double enemyY) {
+        double alpha = Math.toDegrees(Math.atan2(enemyY - myY, enemyX - myX));
+        alpha -= 180;
+            if (alpha < 0) {
+                alpha += 360;
+            }
+            return alpha;
+        }
 
-    public static Move.Shooting getRandomShooting() {
-        return Move.Shooting.values()[(int)(Math.random() * Move.Shooting.values().length)];
+    private Move.Rotation rotate(double alpha) {
+        Move.Rotation rotation = Move.Rotation.Staying;
+        if (alpha >= this.getPlayerTank().getRotationAngle())
+            rotation = Move.Rotation.CounterClockwise;
+        if (alpha < this.getPlayerTank().getRotationAngle())
+            rotation = Move.Rotation.Clockwise;
+        return rotation;
     }
 
     public Move makeMove(double deltaTime) {
-        lastChangingOfMovement += deltaTime;
-        lastChangingOfRotation += deltaTime;
-        if (lastChangingOfMovement >= changeMovementTime) {
-            currentMovement = getRandomMovement();
-            lastChangingOfMovement = 0;
+        double alpha;
+        myX = this.getPlayerTank().getCenterX();
+        myY = this.getPlayerTank().getCenterY();
+        if (seeTank()) {
+            alpha = countAlpha(enemyX, enemyY);
+            //System.out.println(alpha);
+            currentRotation = rotate(alpha);
+        } else {
+            currentRotation = Move.Rotation.CounterClockwise;
         }
-        if (lastChangingOfRotation >= changeRotationTime) {
-            currentRotation = getRandomRotation();
-            lastChangingOfRotation = 0;
-        }
-
+        currentMovement = Move.Movement.Staying;
         return new Move(currentMovement, currentRotation, Move.Shooting.Shoots);
     }
 }

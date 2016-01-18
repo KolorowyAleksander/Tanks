@@ -25,7 +25,7 @@ public class AIGameState extends GameState {
 
         visionChecker = new VisionChecker(fieldWidth, fieldHeight);
 
-        players[0] = new KrzysAI(0, "Krzyś", gameObjectFactory.createGenericTank(startingPositions[0].getX(), startingPositions[0].getY(),
+        players[0] = new OlekAI(0, "BAWS", gameObjectFactory.createGenericTank(startingPositions[0].getX(), startingPositions[0].getY(),
                 90, "tankWaffen", playerOneName));
         players[1] = new AgataAI(1, "Agata", gameObjectFactory.createGenericTank(startingPositions[1].getX(), startingPositions[1].getY(),
                 270, "tankRudy", playerOneName));
