@@ -10,6 +10,11 @@ public class Bullet extends RoundGameObject {
         this.damage = damage;
     }
 
+    public Bullet(Bullet otherBullet) {
+        super(otherBullet);
+        this.damage = otherBullet.damage;
+    }
+
     public double getDamage() {
         return damage;
     }

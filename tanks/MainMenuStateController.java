@@ -24,7 +24,9 @@ public class MainMenuStateController extends Controller{
     }
 
     private void startAITournament() {
-
+        StateManager stateManager = associatedState.stateManager;
+        String fxmlFileName = stateManager.getFXMLFileName("AIGame");
+        stateManager.pushOnStateStack(new AIGameState(stateManager, fxmlFileName, "Player One", "Player Two"));
     }
 
     void initialize() {

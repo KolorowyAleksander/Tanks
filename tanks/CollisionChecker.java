@@ -3,13 +3,9 @@ package tanks;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Circle;
 
-public class CollisionChecker {
-    private double boundariesWidth;
-    private double boundariesHeight;
-
+public class CollisionChecker extends Checker{
     public CollisionChecker(double width, double height) {
-        this.boundariesWidth = width;
-        this.boundariesHeight = height;
+        super(width, height);
     }
 
     public boolean isObjectOutsideOfBoundaries(RoundGameObject gameObject) {
