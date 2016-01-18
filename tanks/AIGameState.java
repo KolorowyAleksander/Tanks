@@ -1,5 +1,7 @@
 package tanks;
 
+import javax.swing.event.ChangeEvent;
+
 public class AIGameState extends GameState {
     public AIGameState(StateManager stateManager, String fxmlFileName, String playerOneName, String playerTwoName) {
         super(stateManager, fxmlFileName, playerOneName, playerTwoName);
@@ -11,12 +13,12 @@ public class AIGameState extends GameState {
     }
 
     protected void updateGame(double deltaTime) {
-        ((HumanGameStateController)controller).setMovesBasedOnKeyboard();
+        ((HumanGameStateController) controller).setMovesBasedOnKeyboard();
         super.updateGame(deltaTime);
     }
 
     protected void draw() {
-        ((AIGameStateController)controller).drawVisionLines(new Tank[]{players[0].getPlayerTank(), players[1].getPlayerTank()});
+        ((AIGameStateController) controller).drawVisionLines(new Tank[]{players[0].getPlayerTank(), players[1].getPlayerTank()});
         super.draw();
     }
 

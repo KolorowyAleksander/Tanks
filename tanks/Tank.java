@@ -34,6 +34,14 @@ public class Tank extends RoundGameObject {
         }
     }
 
+    public void addSpeed(double points) {
+        velocity += points;
+    }
+
+    public void addVision(double points) {
+        rangeOfVision += points;
+    }
+
     public double getHealthPoints() {
         return healthPoints;
     }
