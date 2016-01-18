@@ -227,54 +227,98 @@ public class GameState extends State {
         double posX = currentPosition.getX(), posY = currentPosition.getY();
         double centerX = center.getX(), centerY = center.getY();
 
-        double a = (posY - centerY) / (posX - centerX);
-        double b = posY - a * posX;
+        double a = (centerY - posY) / (centerX - posX);
+        double angle = Math.toDegrees(Math.atan2(posY - centerY, posX - centerX));
 
-        Point2D possibleShiftPoints[] = new Point2D[4];
+        SystemSides side = findSystemSide(currentPosition, angle, fieldWidth, fieldHeight);
 
-        possibleShiftPoints[0] = new Point2D(-b / a , 0);
-        possibleShiftPoints[1] = new Point2D(fieldWidth, a*fieldWidth + b);
-        possibleShiftPoints[2] = new Point2D((fieldHeight - b) / a, fieldHeight);
-        possibleShiftPoints[3] = new Point2D(0, b);
-
-        double distances[] = new double[4];
-        double minimumDistance = Double.MAX_VALUE;
-        int minimumIndex = 0;
-        for (int i = 0; i < 4; i++) {
-            distances[i] = currentPosition.distance(possibleShiftPoints[i]);
-            if (distances[i] < minimumDistance) {
-                minimumDistance = distances[i];
-                minimumIndex = i;
-            }
-        }
-
-        Point2D crossPoint = possibleShiftPoints[minimumIndex];
+        Point2D crossPoint = getCrossPoint(currentPosition, angle, fieldWidth, fieldHeight, side);
 
         double newCenterX = 0, newCenterY = 0;
 
-        switch(minimumIndex) {
-            case 0:
-                newCenterX = crossPoint.getX() + (radius / a);
-                newCenterY = radius;
-                break;
-
-            case 1:
+        switch(side) {
+            case Right:
                 newCenterX = fieldWidth - radius;
                 newCenterY = crossPoint.getY() - (radius * a);
                 break;
 
-            case 2:
+            case Down:
                 newCenterX = crossPoint.getX() - (radius / a);
                 newCenterY = fieldHeight - radius;
                 break;
 
-            case 3:
+            case Left:
                 newCenterX = radius;
                 newCenterY = crossPoint.getY() + (radius * a);
+                break;
+
+            case Up:
+                newCenterX = crossPoint.getX() + (radius / a);
+                newCenterY = radius;
+                break;
         }
 
         return new Point2D(newCenterX, newCenterY);
     }
+
+    protected Point2D getCrossPoint(Point2D point, double rotationAngleInDegrees, double fieldWidth, double fieldHeight, SystemSides side) {
+        double centerX = point.getX(), centerY = point.getY();
+
+        double angle = (rotationAngleInDegrees + 360) % 360;
+
+        if(angle == 90) {
+            return new Point2D(centerX, fieldHeight);
+        }
+        else if (angle == 270) {
+            return new Point2D(centerX, 0);
+        }
+
+        double a = Math.tan(Math.toRadians(angle));
+        double b = centerY - a * centerX;
+
+        switch(side) {
+            case Right:
+                return new Point2D(fieldWidth, a*fieldWidth + b);
+            case Down:
+                return new Point2D((fieldHeight - b) / a, fieldHeight);
+            case Left:
+                return new Point2D(0, b);
+            case Up:
+                return new Point2D(-b / a , 0);
+            default:
+                return new Point2D(0, 0);
+        }
+    }
+
+    protected SystemSides findSystemSide(Point2D point, double rotationAngleInDegrees, double fieldWidth, double fieldHeight) {
+        double centerX = point.getX(), centerY = point.getY();
+        double angle = rotationAngleInDegrees % 360;
+
+        double angleLimits[] = new double[4];
+        angleLimits[0] = Math.atan2(-centerY, fieldWidth - centerX);
+        angleLimits[1] = Math.atan2(fieldHeight - centerY, fieldWidth - centerX);
+        angleLimits[2] = Math.atan2(fieldHeight - centerY, -centerX);
+        angleLimits[3] = Math.atan2(-centerY, -centerX);
+
+        for (int i = 0; i < 4; i++) {
+            angleLimits[i] = (Math.toDegrees(angleLimits[i]) + 360) % 360;
+        }
+
+        if (angle >= angleLimits[0] || angle <= angleLimits[1]) {
+            return SystemSides.Right;
+        }
+        else if (angle < angleLimits[2]) {
+            return SystemSides.Down;
+        }
+        else if (angle <= angleLimits[3]) {
+            return SystemSides.Left;
+        }
+        else{
+            return SystemSides.Up;
+        }
+    }
+
+    enum SystemSides {Right, Down, Left, Up};
 
     public static void swap(Object objectA, Object objectB) {
         Object temp = objectA;
