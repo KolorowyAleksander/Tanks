@@ -36,7 +36,7 @@ public class AIGameStateController extends GameStateController{
 
                 GameState.SystemSides side = ((GameState)associatedState).findSystemSide(startPoint, alfa, fieldWidth, fieldHeight);
                 sides[i] = side;
-                endPoint = ((GameState)associatedState).getCrossPoint(startPoint, alfa, fieldWidth, fieldHeight, side);
+                endPoint = ((GameState)associatedState).getCrossPointWithSide(startPoint, alfa, fieldWidth, fieldHeight, side);
                 startsOfLines[i] = startPoint;
                 endsOfLines[i] = endPoint;
             }

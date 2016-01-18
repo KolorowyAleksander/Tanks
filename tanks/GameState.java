@@ -264,7 +264,7 @@ public class GameState extends State {
 
         SystemSides side = findSystemSide(currentPosition, angle, fieldWidth, fieldHeight);
 
-        Point2D crossPoint = getCrossPoint(currentPosition, angle, fieldWidth, fieldHeight, side);
+        Point2D crossPoint = getCrossPointWithSide(currentPosition, angle, fieldWidth, fieldHeight, side);
 
         double newCenterX = 0, newCenterY = 0;
 
@@ -293,7 +293,7 @@ public class GameState extends State {
         return new Point2D(newCenterX, newCenterY);
     }
 
-    protected Point2D getCrossPoint(Point2D point, double rotationAngleInDegrees, double fieldWidth, double fieldHeight, SystemSides side) {
+    protected Point2D getCrossPointWithSide(Point2D point, double rotationAngleInDegrees, double fieldWidth, double fieldHeight, SystemSides side) {
         double centerX = point.getX(), centerY = point.getY();
 
         double angle = (rotationAngleInDegrees + 360) % 360;

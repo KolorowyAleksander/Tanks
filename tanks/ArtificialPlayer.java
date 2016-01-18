@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public abstract class ArtificialPlayer extends Player {
-    private List<RoundGameObject> visibleObjectsBuffer;
+    protected List<RoundGameObject> visibleObjectsBuffer;
 
     public ArtificialPlayer(int playerNumber, String playerName, Tank tank) {
         super(playerNumber, playerName, tank);
