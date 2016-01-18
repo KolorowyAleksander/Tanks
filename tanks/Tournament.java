@@ -33,7 +33,7 @@ public class Tournament {
     private Point2D startingPositions[];
 
     String tankImages[] = {"tankRudy", "tankWaffen"};
-    double startingRotations[] = {90, 270};
+    double startingRotations[] = {270, 90};
 
     public Tournament(String playerNames[], StateManager stateManager) {
         numberOfPlayers = playerNames.length;

@@ -3,34 +3,24 @@ package tanks;
 import javafx.geometry.Point2D;
 
 public class AhmadAI extends ArtificialPlayer{
-    enum Action { NotOnPosition, OnPosition};
-    Action currentAction = Action.NotOnPosition;
-
-    public AhmadAI(int playerNumber, String playerName, Tank tank) {
-        super(playerNumber, playerName, tank);
+    public AhmadAI(int playerNumber, Tank tank) {
+        super(playerNumber, "Ahmad", tank);
     }
 
-    private boolean isInCentrum() {
-        Point2D center = getPlayerTank().getCenterPoint();
-        double deltaX = Math.abs(center.getX() - 400);
-        double deltaY = Math.abs(center.getY() - 300);
-        if (deltaX < 20 && deltaY < 20) {
-            return true;
-        }
-        else {
-            return false;
-        }
+    public static Move.Movement getRandomMovement() {
+        return Move.Movement.values()[(int)(Math.random() * Move.Movement.values().length)];
     }
 
-    private boolean isOnWayToCenter() {
-        Point2D fieldCenter = new Point2D(400, 300);
-        double x = getPlayerTank().getCenterX(), y = getPlayerTank().getCenterY();
-        double angle = Math.toDegrees(Math.atan2(y - fieldCenter.getY(), x - fieldCenter.getX()));
-        return true;
+    public static Move.Rotation getRandomRotation() {
+        return Move.Rotation.values()[(int)(Math.random() * Move.Rotation.values().length)];
+    }
+
+    public static Move.Shooting getRandomShooting() {
+        return Move.Shooting.values()[(int)(Math.random() * Move.Shooting.values().length)];
     }
 
     public Move makeMove(double deltaTime) {
 
-        return new Move();
+        return new Move(getRandomMovement(), getRandomRotation(), getRandomShooting());
     }
 }

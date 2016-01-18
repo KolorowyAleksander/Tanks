@@ -1,54 +1,62 @@
 package tanks;
 
-public class AgataAI extends ArtificialPlayer{
+public class AgataAI extends ArtificialPlayer {
     boolean startPosition = false;
     Move.Rotation startRotation;
     int counter = 0;
 
-    public AgataAI (int playerNumber, Tank tank) {
+    private boolean seeTank() {
+        for (RoundGameObject element : visibleObjectsBuffer) {
+            if (element instanceof Tank)
+                return true;
+        }
+        return false;
+    }
+
+    public AgataAI(int playerNumber, Tank tank) {
         super(playerNumber, "Agata", tank);
         if (getPlayerTank().getCenterX() < 400) {
             startRotation = Move.Rotation.CounterClockwise;
-        }
-        else{
+        } else {
             startRotation = Move.Rotation.Clockwise;
         }
     }
 
     public static Move.Movement getRandomMovement() {
-        return Move.Movement.values()[(int)(Math.random() * Move.Movement.values().length)];
+        return Move.Movement.values()[(int) (Math.random() * Move.Movement.values().length)];
     }
 
     public static Move.Rotation getRandomRotation() {
-        return Move.Rotation.values()[(int)(Math.random() * Move.Rotation.values().length)];
+        return Move.Rotation.values()[(int) (Math.random() * Move.Rotation.values().length)];
     }
 
     public static Move.Shooting getRandomShooting() {
-        return Move.Shooting.values()[(int)(Math.random() * Move.Shooting.values().length)];
+        return Move.Shooting.values()[(int) (Math.random() * Move.Shooting.values().length)];
     }
 
     public Move makeMove(double deltaTime) {
-        if ((startPosition == false) && (getPlayerTank().getRotationAngle() < 10 || getPlayerTank().getRotationAngle() > 350)) {
-            startPosition = true;
-            if (startRotation == Move.Rotation.Clockwise) {
-                startRotation = Move.Rotation.CounterClockwise;
+        if (seeTank()) {
+            return new Move(Move.Movement.Staying, Move.Rotation.Staying, Move.Shooting.Shoots);
+        } else {
+            if ((startPosition == false) && (getPlayerTank().getRotationAngle() < 10 || getPlayerTank().getRotationAngle() > 350)) {
+                startPosition = true;
+                if (startRotation == Move.Rotation.Clockwise) {
+                    startRotation = Move.Rotation.CounterClockwise;
+                } else {
+                    startRotation = Move.Rotation.Clockwise;
+                }
             }
-            else {
-                startRotation = Move.Rotation.Clockwise;
-            }
-        }
 
-        if (startPosition == false) {
-            return new Move(Move.Movement.Staying, startRotation, Move.Shooting.Shoots);
-        }
-        else {
-            if (counter < 3) {
-                counter++;
-                return new Move(Move.Movement.Forward, Move.Rotation.Staying, Move.Shooting.Shoots);
-            }
-            else {
-                counter = 0;
-                return new Move(Move.Movement.Forward, startRotation, Move.Shooting.Shoots);
+            if (startPosition == false) {
+                return new Move(Move.Movement.Staying, startRotation, Move.Shooting.Shoots);
+            } else {
+                if (counter < 3) {
+                    counter++;
+                    return new Move(Move.Movement.Forward, Move.Rotation.Staying, Move.Shooting.Shoots);
+                } else {
+                    counter = 0;
+                    return new Move(Move.Movement.Forward, startRotation, Move.Shooting.Shoots);
+                }
             }
         }
     }

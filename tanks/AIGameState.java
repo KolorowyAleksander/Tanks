@@ -9,7 +9,7 @@ public class AIGameState extends GameState {
     protected VisionChecker visionChecker;
     private static Tournament tournament;
     private double gameDuration = 0;
-    private final static double gameDurationLimit = 15;
+    private final static double gameDurationLimit = 10;
 
     public AIGameState(StateManager stateManager, Tournament newTournament, String fxmlFileName, ArtificialPlayer playerOne, ArtificialPlayer playerTwo) {
         super(stateManager, fxmlFileName, playerOne.getPlayerName(), playerTwo.getPlayerName());
