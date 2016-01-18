@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class GameState extends State {
     protected static GameObjectFactory gameObjectFactory;
     protected static CollisionChecker collisionChecker;
+    protected static BonusSpawner bonusSpawner;
 
     protected Player players[];
 
@@ -38,10 +39,12 @@ public class GameState extends State {
 
         gameObjectFactory = new GameObjectFactory();
         collisionChecker = new CollisionChecker(fieldWidth, fieldHeight);
+        bonusSpawner = new BonusSpawner(collisionChecker);
 
         players = new Player[2];
 
         bullets = new ConcurrentLinkedQueue<Bullet>();
+        bonuses = new ConcurrentLinkedQueue<Bonus>();
 
         controller.setAssociatedState(this);
 
@@ -68,7 +71,6 @@ public class GameState extends State {
                 long newTimeInNanos = System.nanoTime();
                 double deltaTime = (double) (newTimeInNanos - currentTimeInNanos) / 1000000000.0;
                 currentTimeInNanos = newTimeInNanos;
-                System.out.print(currentTimeInNanos);
                 updateGame(deltaTime);
                 draw();
                 if (checkWhetherTheGameIsOver()) {
@@ -91,7 +93,7 @@ public class GameState extends State {
         gameStateController.drawBorder();
         drawTanks();
         drawBullets();
-        //drawBonuses();
+        drawBonuses();
         drawPlayersData();
     }
 
@@ -126,7 +128,7 @@ public class GameState extends State {
     protected void updateGame(double deltaTime) {
         updateTanks(deltaTime);
         updateBullets(deltaTime);
-        //updateBonuses(deltaTime);
+        updateBonuses(deltaTime);
         checkCollisions();
         deleteBulletsOutsideOfBorders();
         checkWhetherTheGameIsOver();
@@ -134,7 +136,7 @@ public class GameState extends State {
 
     protected void updateTanks(double deltaTime) {
         for (Player player : players) {
-            Move playerMove = player.makeMove();
+            Move playerMove = player.makeMove(deltaTime);
             Tank playerTank = player.getPlayerTank();
 
             playerTank.update(deltaTime);
@@ -159,6 +161,10 @@ public class GameState extends State {
     }
 
     protected void updateBonuses(double deltaTime) {
+        bonusSpawner.update(deltaTime);
+        if(bonusSpawner.isSpawnReady()) {
+            bonuses.add(bonusSpawner.getNewBonus(players[0].getPlayerTank(), players[1].getPlayerTank()));
+        }
         for (Bonus bonus : bonuses) {
             bonus.update(deltaTime);
         }
@@ -168,6 +174,7 @@ public class GameState extends State {
     protected void checkCollisions() {
         ConcurrentLinkedQueue<RoundGameObject> gameObjects = new ConcurrentLinkedQueue<RoundGameObject>();
         gameObjects.addAll(bullets);
+        gameObjects.addAll(bonuses);
         for (Player player : players) {
             gameObjects.add(player.getPlayerTank());
         }
@@ -221,6 +228,7 @@ public class GameState extends State {
             ((Tank) gameObjectA).addHealthPoints(-((Bullet) gameObjectB).getDamage());
             bullets.remove(gameObjectB);
         } else if (gameObjectA instanceof Tank && gameObjectB instanceof Bonus) {
+            System.out.println("Bonus!");
             switch (((Bonus) gameObjectB).getBonusType()) {
                 case ARMOR:
                     ((Tank) gameObjectA).addHealthPoints(300);
@@ -355,11 +363,6 @@ public class GameState extends State {
             }
         }
     }
-
-    public long getStartTimeInNanos() {
-        return startTimeInNanos;
-    }
-
 
     private boolean checkWhetherTheGameIsOver() {
         for (Player player : players) {

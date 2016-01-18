@@ -40,17 +40,17 @@ public class HumanGameStateController extends GameStateController {
     private void initializeKeyboardKeyBindingMap() {
         keyboardKeyBindingMap = new HashMap<KeyCode, KeyboardKeyBinding>();
 
-        keyboardKeyBindingMap.put(KeyCode.UP, new KeyboardKeyBinding(0, Move.MoveSections.Movement, Move.Movement.Forward));
-        keyboardKeyBindingMap.put(KeyCode.DOWN, new KeyboardKeyBinding(0, Move.MoveSections.Movement, Move.Movement.Backward));
-        keyboardKeyBindingMap.put(KeyCode.LEFT, new KeyboardKeyBinding(0, Move.MoveSections.Rotation, Move.Rotation.CounterClockwise));
-        keyboardKeyBindingMap.put(KeyCode.RIGHT, new KeyboardKeyBinding(0, Move.MoveSections.Rotation, Move.Rotation.Clockwise));
-        keyboardKeyBindingMap.put(KeyCode.NUMPAD2, new KeyboardKeyBinding(0, Move.MoveSections.Shooting, Move.Shooting.Shoots));
+        keyboardKeyBindingMap.put(KeyCode.UP, new KeyboardKeyBinding(1, Move.MoveSections.Movement, Move.Movement.Forward));
+        keyboardKeyBindingMap.put(KeyCode.DOWN, new KeyboardKeyBinding(1, Move.MoveSections.Movement, Move.Movement.Backward));
+        keyboardKeyBindingMap.put(KeyCode.LEFT, new KeyboardKeyBinding(1, Move.MoveSections.Rotation, Move.Rotation.CounterClockwise));
+        keyboardKeyBindingMap.put(KeyCode.RIGHT, new KeyboardKeyBinding(1, Move.MoveSections.Rotation, Move.Rotation.Clockwise));
+        keyboardKeyBindingMap.put(KeyCode.NUMPAD2, new KeyboardKeyBinding(1, Move.MoveSections.Shooting, Move.Shooting.Shoots));
 
-        keyboardKeyBindingMap.put(KeyCode.W, new KeyboardKeyBinding(1, Move.MoveSections.Movement, Move.Movement.Forward));
-        keyboardKeyBindingMap.put(KeyCode.S, new KeyboardKeyBinding(1, Move.MoveSections.Movement, Move.Movement.Backward));
-        keyboardKeyBindingMap.put(KeyCode.A, new KeyboardKeyBinding(1, Move.MoveSections.Rotation, Move.Rotation.CounterClockwise));
-        keyboardKeyBindingMap.put(KeyCode.D, new KeyboardKeyBinding(1, Move.MoveSections.Rotation, Move.Rotation.Clockwise));
-        keyboardKeyBindingMap.put(KeyCode.V, new KeyboardKeyBinding(1, Move.MoveSections.Shooting, Move.Shooting.Shoots));
+        keyboardKeyBindingMap.put(KeyCode.W, new KeyboardKeyBinding(0, Move.MoveSections.Movement, Move.Movement.Forward));
+        keyboardKeyBindingMap.put(KeyCode.S, new KeyboardKeyBinding(0, Move.MoveSections.Movement, Move.Movement.Backward));
+        keyboardKeyBindingMap.put(KeyCode.A, new KeyboardKeyBinding(0, Move.MoveSections.Rotation, Move.Rotation.CounterClockwise));
+        keyboardKeyBindingMap.put(KeyCode.D, new KeyboardKeyBinding(0, Move.MoveSections.Rotation, Move.Rotation.Clockwise));
+        keyboardKeyBindingMap.put(KeyCode.V, new KeyboardKeyBinding(0, Move.MoveSections.Shooting, Move.Shooting.Shoots));
     }
 
     private void initializeIsKeyPressedHashMap() {

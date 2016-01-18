@@ -59,6 +59,7 @@ public abstract class RoundGameObject {
     public void rotate(Move.Rotation direction, double deltaTime) {
         switch (direction)
         {
+            default:
             case Staying:
                 break;
 
@@ -69,6 +70,8 @@ public abstract class RoundGameObject {
             case CounterClockwise:
                 rotationAngle -= deltaTime * angularVelocity;
                 break;
+
+
         }
         if (rotationAngle < 0) {
             rotationAngle += 360;

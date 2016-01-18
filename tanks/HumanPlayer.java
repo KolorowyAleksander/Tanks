@@ -9,7 +9,7 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    public Move makeMove() {
+    public Move makeMove(double deltaTime) {
         Move move = new Move(moveBuffer.getMovement(), moveBuffer.getRotation(), moveBuffer.getShooting());
         moveBuffer = new Move();
         return move;

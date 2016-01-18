@@ -20,8 +20,8 @@ public class GameObjectFactory {
         imageEntries.put("/assets/tanks/tankWaffen.png", "tankWaffen");
         imageEntries.put("/assets/bullet.png", "bullet");
         imageEntries.put("/assets/boosts/boosts_health.png", "health");
-        imageEntries.put("/assets/boosts/boosts_shield_red.png", "shield");
-        imageEntries.put("/assets/boosts/boosts_sight.png", "sight");
+        imageEntries.put("/assets/boosts/boosts_shield_red.png", "armor");
+        imageEntries.put("/assets/boosts/boosts_sight.png", "vision");
         imageEntries.put("/assets/boosts/boosts_speed_red.png", "speed");
 
         imageLoader.putMapIntoImageAlbum(imageEntries);
@@ -33,6 +33,10 @@ public class GameObjectFactory {
         newTank.setOwnerName(playerName);
 
         return newTank;
+    }
+
+    public Tank createGenericTank(double startX, double startY, double startDegree, String imageName, String playerName) {
+        return createTank(startX, startY, startDegree, 32, 50, 50, imageName, playerName);
     }
 
     public Bullet createBullet(double startX, double startY, double startDegree, double radius, double velocity, double damage) {

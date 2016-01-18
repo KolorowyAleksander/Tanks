@@ -12,7 +12,7 @@ public abstract class ArtificialPlayer extends Player {
         visibleObjectsBuffer = new ArrayList<RoundGameObject>();
     }
 
-    public abstract Move makeMove();
+    public abstract Move makeMove(double deltaTime);
 
     public void receiveVisibleObjectsData(List<RoundGameObject> visibleObjects) {
         visibleObjectsBuffer = visibleObjects;

@@ -89,7 +89,8 @@ public abstract class GameStateController extends Controller {
         exitGameButton.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                exitGame();
+                ((GameState)associatedState).stateManager.popOutOfStateStack();
+                ((GameState)associatedState).stateManager.refreshScene();
             }
         });
 

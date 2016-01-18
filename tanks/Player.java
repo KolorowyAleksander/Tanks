@@ -11,7 +11,7 @@ public abstract class Player {
         this.tank = tank;
     }
 
-    abstract public Move makeMove();
+    abstract public Move makeMove(double deltaTime);
 
     public Tank getPlayerTank() {return tank; }
     public int getPlayerNumber() {

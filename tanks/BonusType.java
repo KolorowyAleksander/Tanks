@@ -22,9 +22,6 @@ public enum BonusType {
             case SPEED:
                 typeString = "speed";
                 break;
-            case VISION:
-                typeString = "vision";
-                break;
             default:
                 typeString = "health";
                 break;
