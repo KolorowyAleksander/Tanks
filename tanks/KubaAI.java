@@ -1,8 +1,19 @@
 package tanks;
 
+import javafx.geometry.Point2D;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class KubaAI extends ArtificialPlayer {
+    private final static double changeMovementTime = 2.0, changeRotationTime = 0.5;
+    private double lastChangingOfMovement = 0.0, lastChangingOfRotation = 0.0;
+
+    private Move.Movement currentMovement;
+    private Move.Rotation currentRotation;
+
     public KubaAI (int playerNumber, Tank tank) {
-        super(playerNumber, "KubaAI", tank);
+        super(playerNumber, "Nuurek", tank);
     }
 
     public static Move.Movement getRandomMovement() {
@@ -18,6 +29,17 @@ public class KubaAI extends ArtificialPlayer {
     }
 
     public Move makeMove(double deltaTime) {
-        return new Move(getRandomMovement(), getRandomRotation(), getRandomShooting());
+        lastChangingOfMovement += deltaTime;
+        lastChangingOfRotation += deltaTime;
+        if (lastChangingOfMovement >= changeMovementTime) {
+            currentMovement = getRandomMovement();
+            lastChangingOfMovement = 0;
+        }
+        if (lastChangingOfRotation >= changeRotationTime) {
+            currentRotation = getRandomRotation();
+            lastChangingOfRotation = 0;
+        }
+
+        return new Move(currentMovement, currentRotation, Move.Shooting.Shoots);
     }
 }

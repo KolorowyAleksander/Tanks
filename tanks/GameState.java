@@ -30,9 +30,17 @@ public class GameState extends State {
 
     final static private int framesPerSecond = 30;
 
-    protected double fieldWidth = 800.0, fieldHeight = 600.0;
+    protected static double fieldWidth = 800.0, fieldHeight = 600.0;
     protected double damageOnTanksCollision = 100.0;
     protected static final Point2D startingPositions[] = {new Point2D(200, 300), new Point2D(600, 300)};
+
+    public static double getFieldWidth() {
+        return fieldWidth;
+    }
+
+    public static double getFieldHeight() {
+        return fieldHeight;
+    }
 
     public static Point2D[] getStartingPositions() {
         return startingPositions;

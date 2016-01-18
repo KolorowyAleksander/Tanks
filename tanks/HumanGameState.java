@@ -6,9 +6,9 @@ public class HumanGameState extends GameState {
         super(stateManager, fxmlFileName, playerOneName, playerTwoName);
 
         players[0] = new HumanPlayer(0, playerOneName, gameObjectFactory.createGenericTank(startingPositions[0].getX(), startingPositions[0].getY(),
-                90, "tankRudy", playerOneName));
+                270, "tankRudy", playerOneName));
         players[1] = new HumanPlayer(1, playerTwoName, gameObjectFactory.createGenericTank(startingPositions[1].getX(), startingPositions[1].getY(),
-                -90, "tankWaffen", playerTwoName));
+                90, "tankWaffen", playerTwoName));
     }
 
     protected void updateGame(double deltaTime) {
