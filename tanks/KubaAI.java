@@ -1,8 +1,8 @@
 package tanks;
 
 public class KubaAI extends ArtificialPlayer {
-    public KubaAI (int playerNumber, String playerName, Tank tank) {
-        super(playerNumber, playerName, tank);
+    public KubaAI (int playerNumber, Tank tank) {
+        super(playerNumber, "KubaAI", tank);
     }
 
     public static Move.Movement getRandomMovement() {

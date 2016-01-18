@@ -14,6 +14,8 @@ public class OlekAI extends ArtificialPlayer {
 
     public OlekAI(int playerNumber, String playerName, Tank tank) {
         super(playerNumber, playerName, tank);
+    public OlekAI (int playerNumber, Tank tank) {
+        super(playerNumber, "Olek222", tank);
     }
 
     private boolean seeTank() {

@@ -5,8 +5,8 @@ public class AgataAI extends ArtificialPlayer{
     Move.Rotation startRotation;
     int counter = 0;
 
-    public AgataAI (int playerNumber, String playerName, Tank tank) {
-        super(playerNumber, playerName, tank);
+    public AgataAI (int playerNumber, Tank tank) {
+        super(playerNumber, "Agata", tank);
         if (getPlayerTank().getCenterX() < 400) {
             startRotation = Move.Rotation.CounterClockwise;
         }

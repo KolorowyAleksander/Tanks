@@ -1,5 +1,7 @@
 package tanks;
 
+import java.util.List;
+
 public class ResultState extends State {
     String labelStatement = "";
 
@@ -9,10 +11,10 @@ public class ResultState extends State {
         ((ResultStateController)controller).setWinnerStatement(labelStatement, 120);
     }
 
-    public ResultState(StateManager stateManager, String fxmlFilename, Score[] scores) {
+    public ResultState(StateManager stateManager, String fxmlFilename, List<Score> scores) {
         super(stateManager, fxmlFilename);
         for (Score score : scores) {
-            labelStatement += score.name + " - " + score.points + " points\n";
+            labelStatement += score.playerName + " - " + score.points + " points\n";
         }
         ((ResultStateController)controller).setWinnerStatement(labelStatement, 40);
     }
