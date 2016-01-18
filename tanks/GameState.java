@@ -55,7 +55,7 @@ public class GameState extends State {
         Timeline timeline = new Timeline();
         timeline.setCycleCount(Animation.INDEFINITE);
 
-        KeyFrame gameLoopFrame = new KeyFrame(Duration.millis(1000.0 / (double)framesPerSecond), createGameLoop());
+        KeyFrame gameLoopFrame = new KeyFrame(Duration.millis(1000.0 / (double) framesPerSecond), createGameLoop());
         timeline.getKeyFrames().add(gameLoopFrame);
 
         return timeline;
@@ -66,7 +66,7 @@ public class GameState extends State {
             @Override
             public void handle(ActionEvent event) {
                 long newTimeInNanos = System.nanoTime();
-                double deltaTime = (double)(newTimeInNanos - currentTimeInNanos) / 1000000000.0;
+                double deltaTime = (double) (newTimeInNanos - currentTimeInNanos) / 1000000000.0;
                 currentTimeInNanos = newTimeInNanos;
                 System.out.print(currentTimeInNanos);
                 updateGame(deltaTime);
@@ -85,17 +85,18 @@ public class GameState extends State {
     }
 
     protected void draw() {
-        GameStateController gameStateController = (GameStateController)controller;
+        GameStateController gameStateController = (GameStateController) controller;
         gameStateController.clearCanvas();
         gameStateController.drawBackground();
         gameStateController.drawBorder();
         drawTanks();
         drawBullets();
+        //drawBonuses();
         drawPlayersData();
     }
 
     protected void drawPlayersData() {
-        ((GameStateController)controller).drawPlayersData(players);
+        ((GameStateController) controller).drawPlayersData(players);
     }
 
     protected void drawTanks() {
@@ -106,19 +107,26 @@ public class GameState extends State {
     }
 
     protected void drawBullets() {
-        for (Bullet bullet  : bullets) {
+        for (Bullet bullet : bullets) {
             drawGameObjectOnCanvas(bullet);
         }
     }
 
+    protected void drawBonuses() {
+        for (Bonus bonus : bonuses) {
+            drawGameObjectOnCanvas(bonus);
+        }
+    }
+
     protected void drawGameObjectOnCanvas(RoundGameObject gameObject) {
-        ((GameStateController)(controller)).drawRotatedImageOnGameCanvas(gameObject.getImage(), gameObject.getCenterX(),
+        ((GameStateController) (controller)).drawRotatedImageOnGameCanvas(gameObject.getImage(), gameObject.getCenterX(),
                 gameObject.getCenterY(), gameObject.getRotationAngle());
     }
 
     protected void updateGame(double deltaTime) {
         updateTanks(deltaTime);
         updateBullets(deltaTime);
+        //updateBonuses(deltaTime);
         checkCollisions();
         deleteBulletsOutsideOfBorders();
         checkWhetherTheGameIsOver();
@@ -147,6 +155,12 @@ public class GameState extends State {
         for (Bullet bullet : bullets) {
             bullet.update(deltaTime);
             bullet.move(Move.Movement.Forward, deltaTime);
+        }
+    }
+
+    protected void updateBonuses(double deltaTime) {
+        for (Bonus bonus : bonuses) {
+            bonus.update(deltaTime);
         }
     }
 
@@ -194,32 +208,41 @@ public class GameState extends State {
 
             if (collisionChecker.isCircleInsideOfBoundaries(new Circle(newCenterA.getX(), newCenterA.getY(), gameObjectA.getRadius()))) {
                 gameObjectA.moveTo(newCenterA);
-            }
-            else {
+            } else {
                 gameObjectA.moveTo(shiftPointOnTankCollision(centerA, center, gameObjectA.getRadius()));
             }
 
             if (collisionChecker.isCircleInsideOfBoundaries(new Circle(newCenterB.getX(), newCenterB.getY(), gameObjectB.getRadius()))) {
                 gameObjectB.moveTo(newCenterB);
-            }
-            else {
+            } else {
                 gameObjectB.moveTo(shiftPointOnTankCollision(centerB, center, gameObjectB.getRadius()));
             }
-        }
-        else if (gameObjectA instanceof Tank && gameObjectB instanceof Bullet) {
+        } else if (gameObjectA instanceof Tank && gameObjectB instanceof Bullet) {
             ((Tank) gameObjectA).addHealthPoints(-((Bullet) gameObjectB).getDamage());
             bullets.remove(gameObjectB);
-        }
-        else if (gameObjectA instanceof Tank && gameObjectB instanceof Bonus) {
-
-        }
-        else if (gameObjectA instanceof Bullet && gameObjectB instanceof Bullet) {
+        } else if (gameObjectA instanceof Tank && gameObjectB instanceof Bonus) {
+            switch (((Bonus) gameObjectB).getBonusType()) {
+                case ARMOR:
+                    ((Tank) gameObjectA).addHealthPoints(300);
+                    break;
+                case HEALTH:
+                    ((Tank) gameObjectA).addHealthPoints(100);
+                    break;
+                case SPEED:
+                    ((Tank) gameObjectA).addSpeed(3);
+                    break;
+                case VISION:
+                    ((Tank) gameObjectA).addVision(3);
+                    break;
+                default:
+                    break;
+            }
+            bonuses.remove(gameObjectB);
+        } else if (gameObjectA instanceof Bullet && gameObjectB instanceof Bullet) {
             return;
-        }
-        else if (gameObjectA instanceof Bullet && gameObjectB instanceof Bonus) {
+        } else if (gameObjectA instanceof Bullet && gameObjectB instanceof Bonus) {
             return;
-        }
-        else if (gameObjectA instanceof Bonus && gameObjectB instanceof Bonus) {
+        } else if (gameObjectA instanceof Bonus && gameObjectB instanceof Bonus) {
             return;
         }
     }
@@ -237,7 +260,7 @@ public class GameState extends State {
 
         double newCenterX = 0, newCenterY = 0;
 
-        switch(side) {
+        switch (side) {
             case Right:
                 newCenterX = fieldWidth - radius;
                 newCenterY = crossPoint.getY() - (radius * a);
@@ -267,25 +290,24 @@ public class GameState extends State {
 
         double angle = (rotationAngleInDegrees + 360) % 360;
 
-        if(angle == 90) {
+        if (angle == 90) {
             return new Point2D(centerX, fieldHeight);
-        }
-        else if (angle == 270) {
+        } else if (angle == 270) {
             return new Point2D(centerX, 0);
         }
 
         double a = Math.tan(Math.toRadians(angle));
         double b = centerY - a * centerX;
 
-        switch(side) {
+        switch (side) {
             case Right:
-                return new Point2D(fieldWidth, a*fieldWidth + b);
+                return new Point2D(fieldWidth, a * fieldWidth + b);
             case Down:
                 return new Point2D((fieldHeight - b) / a, fieldHeight);
             case Left:
                 return new Point2D(0, b);
             case Up:
-                return new Point2D(-b / a , 0);
+                return new Point2D(-b / a, 0);
             default:
                 return new Point2D(0, 0);
         }
@@ -293,7 +315,7 @@ public class GameState extends State {
 
     protected SystemSides findSystemSide(Point2D point, double rotationAngleInDegrees, double fieldWidth, double fieldHeight) {
         double centerX = point.getX(), centerY = point.getY();
-        double angle = (rotationAngleInDegrees +360) % 360;
+        double angle = (rotationAngleInDegrees + 360) % 360;
 
         double angleLimits[] = new double[4];
         angleLimits[0] = Math.atan2(-centerY, fieldWidth - centerX);
@@ -307,19 +329,18 @@ public class GameState extends State {
 
         if (angle >= angleLimits[0] || angle <= angleLimits[1]) {
             return SystemSides.Right;
-        }
-        else if (angle < angleLimits[2]) {
+        } else if (angle < angleLimits[2]) {
             return SystemSides.Down;
-        }
-        else if (angle <= angleLimits[3]) {
+        } else if (angle <= angleLimits[3]) {
             return SystemSides.Left;
-        }
-        else{
+        } else {
             return SystemSides.Up;
         }
     }
 
-    enum SystemSides {Right, Down, Left, Up};
+    enum SystemSides {Right, Down, Left, Up}
+
+    ;
 
     public static void swap(Object objectA, Object objectB) {
         Object temp = objectA;
@@ -341,8 +362,8 @@ public class GameState extends State {
 
 
     private boolean checkWhetherTheGameIsOver() {
-        for(Player player : players) {
-            if(player.getPlayerTank().getHealthPoints() <= 0) {
+        for (Player player : players) {
+            if (player.getPlayerTank().getHealthPoints() <= 0) {
                 return true;
             }
         }
