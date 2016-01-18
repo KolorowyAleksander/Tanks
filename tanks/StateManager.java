@@ -10,6 +10,7 @@ public class StateManager {
     private Stack<State> stateStack;
     private Stage mainStage;
     private Map<String, String> fxmlFilesNames;
+    private String[] artificialPlayersNames;
 
     public StateManager()
     {
@@ -20,6 +21,8 @@ public class StateManager {
         fxmlFilesNames.put("HumanGame", "/FXML/HumanGameScene.fxml");
         fxmlFilesNames.put("AIGame", "/FXML/AIGameScene.fxml");
         fxmlFilesNames.put("ResultsScene", "/FXML/ResultScene.fxml");
+
+        artificialPlayersNames = new String[]{"Agata", "Olek", "Kuba"};
     }
 
     public String getFXMLFileName(String stateName) {
@@ -31,7 +34,6 @@ public class StateManager {
         mainStage.setResizable(false);
 
         State mainMenuState = new MainMenuState(this, getFXMLFileName("MainMenu"));
-        //State mainMenuState = new HumanGameState(fxmlFilesNames.get("HumanGame"), "Player One", "Player Two");
         stateStack.push(mainMenuState);
 
         mainStage.setTitle("Tanks");
@@ -56,5 +58,9 @@ public class StateManager {
 
     public void closeProgram() {
         mainStage.close();
+    }
+
+    public String[] getArtificialPlayersNames() {
+        return artificialPlayersNames;
     }
 }

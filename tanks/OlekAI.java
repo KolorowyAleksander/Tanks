@@ -7,8 +7,8 @@ public class OlekAI extends ArtificialPlayer {
     private Move.Movement currentMovement;
     private Move.Rotation currentRotation;
 
-    public OlekAI (int playerNumber, String playerName, Tank tank) {
-        super(playerNumber, playerName, tank);
+    public OlekAI (int playerNumber, Tank tank) {
+        super(playerNumber, "Olek222", tank);
     }
 
     public static Move.Movement getRandomMovement() {

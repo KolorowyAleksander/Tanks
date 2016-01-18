@@ -1,38 +1,29 @@
 package tanks;
 
+import jdk.management.resource.internal.TotalResourceContext;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class AIGameState extends GameState {
     protected VisionChecker visionChecker;
     private static Tournament tournament;
+    private double gameDuration = 0;
+    private final static double gameDurationLimit = 15;
 
-    public AIGameState(StateManager stateManager, String fxmlFileName, Tournament tournament) {
-        super(stateManager, fxmlFileName, tournament.matches[0].playerOneName, tournament.matches[0].playerTwoName);
-        this.tournament = tournament;
-        Match newMatch = tournament.getMatch();
-
-        visionChecker = new VisionChecker(fieldWidth, fieldHeight);
-
-        players[0] = new KubaAI(0, "Kuba", gameObjectFactory.createGenericTank(startingPositions[0].getX(), startingPositions[0].getY(),
-                90, "tankWaffen", newMatch.playerOneName));
-        players[1] = new AgataAI(1, "Olek", gameObjectFactory.createGenericTank(startingPositions[1].getX(), startingPositions[1].getY(),
-                -90, "tankRudy", newMatch.playerTwoName));
-    }
-
-    public AIGameState(StateManager stateManager, String fxmlFileName, String playerOneName, String playerTwoName) {
-        super(stateManager, fxmlFileName, playerOneName, playerTwoName);
+    public AIGameState(StateManager stateManager, Tournament newTournament, String fxmlFileName, ArtificialPlayer playerOne, ArtificialPlayer playerTwo) {
+        super(stateManager, fxmlFileName, playerOne.getPlayerName(), playerTwo.getPlayerName());
 
         visionChecker = new VisionChecker(fieldWidth, fieldHeight);
+        tournament = newTournament;
 
-        players[0] = new KrzysAI(0, "Krzyś", gameObjectFactory.createGenericTank(startingPositions[0].getX(), startingPositions[0].getY(),
-                90, "tankWaffen", playerOneName));
-        players[1] = new AgataAI(1, "Agata", gameObjectFactory.createGenericTank(startingPositions[1].getX(), startingPositions[1].getY(),
-                270, "tankRudy", playerOneName));
+        players[0] = playerOne;
+        players[1] = playerTwo;
     }
 
     protected void updateGame(double deltaTime) {
         sendDataToAIs(players);
+        gameDuration += deltaTime;
         super.updateGame(deltaTime);
     }
 
@@ -41,10 +32,30 @@ public class AIGameState extends GameState {
         ((AIGameStateController)controller).drawVisionLines(new Tank[]{players[0].getPlayerTank(), players[1].getPlayerTank()});
     }
 
+    protected boolean checkWhetherTheGameIsOver() {
+        if (super.checkWhetherTheGameIsOver() || gameDuration >= gameDurationLimit) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
     protected void endGame() {
         super.endGame();
-        stateManager.pushOnStateStack(new ResultState(stateManager, stateManager.getFXMLFileName("ResultsScene"), "Player one"));
+        int result = -1;
+        double hpOne = players[0].getPlayerTank().getHealthPoints();
+        double hpTwo = players[1].getPlayerTank().getHealthPoints();
+        if (hpOne > hpTwo) {
+            result = 1;
+        }
+        else if (hpTwo > hpOne) {
+            result = 2;
+        }
+        else {
+            result = 0;
+        }
+        tournament.endMatch(result);
     }
 
     private void sendDataToAIs(Player[] players) {

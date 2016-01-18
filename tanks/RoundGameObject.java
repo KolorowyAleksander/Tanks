@@ -57,6 +57,10 @@ public abstract class RoundGameObject {
     public Point2D getPreviousPosition() {return previousPosition;}
 
     public void rotate(Move.Rotation direction, double deltaTime) {
+        if (direction == null){
+            return;
+        }
+
         switch (direction)
         {
             default:
@@ -76,7 +80,7 @@ public abstract class RoundGameObject {
         if (rotationAngle < 0) {
             rotationAngle += 360;
         }
-        if (rotationAngle > 360) {
+        if (rotationAngle >= 360) {
             rotationAngle -= 360;
         }
     }

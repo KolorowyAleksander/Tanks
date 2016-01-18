@@ -21,15 +21,15 @@ public class VisionChecker extends Checker{
         double a = (otherObject.getCenterY() - prospector.getCenterY()) / (otherObject.getCenterX() - prospector.getCenterX());
         double b = a * otherObject.getCenterX() - otherObject.getCenterY();
 
-        if(isLinearFunctionCrossingCircle(a, b, otherObject.getCollisionBounds())) {
+        /*if(isLinearFunctionCrossingCircle(a, b, otherObject.getCollisionBounds())) {
             return true;
-        }
+        }*/
 
         return false;
     }
 
     protected boolean isPointInRangeOfVision(Point2D prospector, double rotationAngle, double rangeOfVision, Point2D otherObject) {
-        double alfa = Math.toDegrees(Math.atan2((prospector.getY() - otherObject.getY()), (prospector.getX() - otherObject.getX())));
+        double alfa = Math.toDegrees(Math.atan2((otherObject.getY() - prospector.getY()), (otherObject.getX() - prospector.getX())));
         double lowerBoundaries = ((rotationAngle - rangeOfVision / 2) + 360) % 360;
         double higherBoundaries = ((rotationAngle + rangeOfVision / 2) + 360) % 360;
         if ((alfa >= lowerBoundaries) && (alfa <= higherBoundaries)) {

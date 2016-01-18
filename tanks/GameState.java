@@ -34,6 +34,10 @@ public class GameState extends State {
     protected double damageOnTanksCollision = 100.0;
     protected static final Point2D startingPositions[] = {new Point2D(200, 300), new Point2D(600, 300)};
 
+    public static Point2D[] getStartingPositions() {
+        return startingPositions;
+    }
+
     public GameState(StateManager stateManager, String fxmlFileName, String playerOneName, String playerTwoName) {
         super(stateManager, fxmlFileName);
 
@@ -364,7 +368,7 @@ public class GameState extends State {
         }
     }
 
-    private boolean checkWhetherTheGameIsOver() {
+    protected boolean checkWhetherTheGameIsOver() {
         for (Player player : players) {
             if (player.getPlayerTank().getHealthPoints() <= 0) {
                 return true;
