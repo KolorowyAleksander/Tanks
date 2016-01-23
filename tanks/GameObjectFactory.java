@@ -1,6 +1,5 @@
 package tanks;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,7 +47,7 @@ public class GameObjectFactory {
 
     public Bonus createBonus(double x, double y, double radius) {
         Bonus newBonus = new Bonus(x, y, 0, radius, 0, 0);
-        BonusType type = BonusType.getRandom();
+        BonusType type = BonusType.getRandomBonusForHumans();
         newBonus.setBonusType(type);
         newBonus.setImage(imageLoader.getImageFromAlbum(BonusType.getString(type)));
 

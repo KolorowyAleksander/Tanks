@@ -27,6 +27,7 @@ public class ResultStateController extends Controller {
             @Override
             public void handle(MouseEvent event) {
                 StateManager stateManager = associatedState.stateManager;
+
                 stateManager.popOutOfStateStack();
                 stateManager.refreshScene();
             }

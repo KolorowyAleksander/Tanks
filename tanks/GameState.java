@@ -240,7 +240,6 @@ public class GameState extends State {
             ((Tank) gameObjectA).addHealthPoints(-((Bullet) gameObjectB).getDamage());
             bullets.remove(gameObjectB);
         } else if (gameObjectA instanceof Tank && gameObjectB instanceof Bonus) {
-            System.out.println("Bonus!");
             switch (((Bonus) gameObjectB).getBonusType()) {
                 case ARMOR:
                     ((Tank) gameObjectA).addHealthPoints(300);

@@ -6,8 +6,10 @@ public class Bonus extends RoundGameObject {
         super(startX, startY, startDegree, radius, velocity, angularVelocity);
     }
 
-    public Bonus(Bonus obj) {
-        this(obj.getCenterX(), obj.getCenterY(), obj.getRotationAngle(), obj.getRadius(), obj.getVelocity(), obj.getAngularVelocity());
+    public Bonus(Bonus otherBonus) {
+        super(otherBonus.getCenterX(), otherBonus.getCenterY(), otherBonus.getRotationAngle(), otherBonus.getRadius(),
+                otherBonus.getVelocity(), otherBonus.getAngularVelocity());
+        this.type = otherBonus.getBonusType();
     }
 
     @Override

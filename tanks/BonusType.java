@@ -6,8 +6,8 @@ public enum BonusType {
     SPEED,
     VISION;
 
-    public static BonusType getRandom() {
-        return values()[(int) (Math.random() * values().length)];
+    public static BonusType getRandomBonusForHumans() {
+        return values()[(int) (Math.random() * (values().length - 1))];
     }
 
     public static String getString(BonusType type) {

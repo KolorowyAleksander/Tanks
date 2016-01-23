@@ -30,6 +30,7 @@ public class VisionChecker extends Checker{
 
     protected boolean isPointInRangeOfVision(Point2D prospector, double rotationAngle, double rangeOfVision, Point2D otherObject) {
         double alfa = Math.toDegrees(Math.atan2((otherObject.getY() - prospector.getY()), (otherObject.getX() - prospector.getX())));
+        alfa = (alfa + 360) % 360;
         double lowerBoundaries = ((rotationAngle - rangeOfVision / 2) + 360) % 360;
         double higherBoundaries = ((rotationAngle + rangeOfVision / 2) + 360) % 360;
         if ((alfa >= lowerBoundaries) && (alfa <= higherBoundaries)) {

@@ -9,7 +9,7 @@ public class AIGameState extends GameState {
     protected VisionChecker visionChecker;
     private static Tournament tournament;
     private double gameDuration = 0;
-    private final static double gameDurationLimit = 10;
+    private final static double gameDurationLimit = 600;
 
     public AIGameState(StateManager stateManager, Tournament newTournament, String fxmlFileName, ArtificialPlayer playerOne, ArtificialPlayer playerTwo) {
         super(stateManager, fxmlFileName, playerOne.getPlayerName(), playerTwo.getPlayerName());
@@ -78,6 +78,11 @@ public class AIGameState extends GameState {
         for (Bullet bullet : bullets) {
             if (visionChecker.isObjectVisible(playerTank, playerTank.getRangeOfVision(), bullet)) {
                 objectsBuffer.add(new Bullet(bullet));
+            }
+        }
+        for (Bonus bonus : bonuses) {
+            if (visionChecker.isObjectVisible(playerTank, playerTank.getRangeOfVision(), bonus)) {
+                objectsBuffer.add(new Bonus(bonus));
             }
         }
         return objectsBuffer;

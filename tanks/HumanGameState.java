@@ -32,6 +32,8 @@ public class HumanGameState extends GameState {
         }
 
         super.endGame();
+        stateManager.popOutOfStateStack();
         stateManager.pushOnStateStack(new ResultState(stateManager, stateManager.getFXMLFileName("ResultsScene"), winner.getPlayerName()));
+        stateManager.refreshScene();
     }
 }
