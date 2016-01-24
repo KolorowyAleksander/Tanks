@@ -19,6 +19,8 @@ public class AIGameState extends GameState {
 
         players[0] = playerOne;
         players[1] = playerTwo;
+
+        numberOfBonusTypes = 4;
     }
 
     protected void updateGame(double deltaTime) {
