@@ -9,6 +9,8 @@ public class HumanGameState extends GameState {
                 270, "tankRudy", playerOneName));
         players[1] = new HumanPlayer(1, playerTwoName, gameObjectFactory.createGenericTank(startingPositions[1].getX(), startingPositions[1].getY(),
                 90, "tankWaffen", playerTwoName));
+
+        numberOfBonusTypes = 3;
     }
 
     protected void updateGame(double deltaTime) {

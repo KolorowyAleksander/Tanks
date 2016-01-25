@@ -22,10 +22,6 @@ public class VisionChecker extends Checker{
 
         for (double visionBoundary : visionBoundaries) {
             if (isObjectCrossingVisionBoundary(centerOfProspector, visionBoundary, otherObject)) {
-                if (!(otherObject instanceof Bullet)) {
-                    System.out.println("Vision boundary " + visionBoundary + " of " + prospector.getClass().toString()
-                            + " has crossed " + otherObject.getClass().toString());
-                }
                 return true;
             }
         }

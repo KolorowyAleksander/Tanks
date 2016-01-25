@@ -63,7 +63,27 @@ public class AIGameStateController extends GameStateController{
                     anotherX = 0;
                     anotherY = fieldHeight;
                 }
-                else {
+                else if (sides[0] == GameState.SystemSides.Left && sides[1] == GameState.SystemSides.Up){
+                    anotherX = 0;
+                    anotherY = 0;
+                }
+                else if (sides[0] == GameState.SystemSides.Up && sides[1] == GameState.SystemSides.Down) {
+                    graphicsContext.lineTo(fieldWidth, 0);
+                    anotherX = fieldWidth;
+                    anotherY = fieldHeight;
+                }
+                else if (sides[0] == GameState.SystemSides.Right && sides[1] == GameState.SystemSides.Left) {
+                    graphicsContext.lineTo(fieldWidth, fieldHeight);
+                    anotherX = 0;
+                    anotherY = fieldHeight;
+                }
+                else if (sides[0] == GameState.SystemSides.Down && sides[1] == GameState.SystemSides.Up) {
+                    graphicsContext.lineTo(0, fieldHeight);
+                    anotherX = 0;
+                    anotherY = 0;
+                }
+                else if (sides[0] == GameState.SystemSides.Left && sides[1] == GameState.SystemSides.Right) {
+                    graphicsContext.lineTo(0, fieldHeight);
                     anotherX = 0;
                     anotherY = 0;
                 }

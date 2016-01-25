@@ -6,6 +6,8 @@ public class Tank extends RoundGameObject {
     private double rangeOfVision = 30.0;
     private double shotInterval = 1.0;
     private double timeFromLastShot = 0.0;
+    private final static double startArmorPoints = 100.0;
+    private double armor = startArmorPoints;
     private String ownerName;
 
     {
@@ -44,15 +46,23 @@ public class Tank extends RoundGameObject {
         velocity += points;
     }
 
+    public void addRotationSpeed(double points) {angularVelocity += points;}
+
     public void addVision(double points) {
         rangeOfVision += points;
     }
+
+    public void addArmor(double points) {armor += points;}
 
     public double getHealthPoints() {
         return healthPoints;
     }
 
     public static double getMaxHealthPoints() {return maxHealthPoints;}
+
+    public double getArmorPoints() {return armor;}
+
+    public static double getStartArmorPoints() {return startArmorPoints;}
 
     @Override
     public void update(double deltaTime) {

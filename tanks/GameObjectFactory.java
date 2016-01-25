@@ -2,9 +2,11 @@ package tanks;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class GameObjectFactory {
     private static ImageLoader imageLoader;
+    Random randomEngine;
 
     public GameObjectFactory() {
         loadImageAlbum();
@@ -20,10 +22,16 @@ public class GameObjectFactory {
         imageEntries.put("/assets/bullet.png", "bullet");
         imageEntries.put("/assets/boosts/boosts_health.png", "health");
         imageEntries.put("/assets/boosts/boosts_shield_red.png", "armor");
-        imageEntries.put("/assets/boosts/boosts_sight.png", "vision");
+        imageEntries.put("/assets/boosts/boosts_sight_inversed.png", "vision");
         imageEntries.put("/assets/boosts/boosts_speed_red.png", "speed");
 
         imageLoader.putMapIntoImageAlbum(imageEntries);
+
+        randomEngine = new Random();
+    }
+
+    private double getRandomDouble(double min, double max) {
+        return min + (max - min) * randomEngine.nextDouble();
     }
 
     public Tank createTank(double startX, double startY, double startDegree, double radius, double velocity, double angularVelocity, String imageName, String playerName) {
@@ -39,15 +47,16 @@ public class GameObjectFactory {
     }
 
     public Bullet createBullet(double startX, double startY, double startDegree, double radius, double velocity, double damage) {
+        double damageWithRandom = damage + getRandomDouble(-0.2 * damage, 0.2 * damage);
         Bullet newBullet = new Bullet(startX, startY, startDegree, radius, velocity, damage);
         newBullet.setImage(imageLoader.getImageFromAlbum("bullet"));
 
         return newBullet;
     }
 
-    public Bonus createBonus(double x, double y, double radius) {
+    public Bonus createBonus(double x, double y, double radius, int numberOfBonuses) {
         Bonus newBonus = new Bonus(x, y, 0, radius, 0, 0);
-        BonusType type = BonusType.getRandomBonusForHumans();
+        BonusType type = BonusType.getRandomBonus(numberOfBonuses);
         newBonus.setBonusType(type);
         newBonus.setImage(imageLoader.getImageFromAlbum(BonusType.getString(type)));
 

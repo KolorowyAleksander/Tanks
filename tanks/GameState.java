@@ -15,6 +15,7 @@ public class GameState extends State {
     protected static GameObjectFactory gameObjectFactory;
     protected static CollisionChecker collisionChecker;
     protected static BonusSpawner bonusSpawner;
+    protected int numberOfBonusTypes;
 
     protected Player players[];
 
@@ -28,7 +29,7 @@ public class GameState extends State {
     protected long startTimeInNanos;
     protected long currentTimeInNanos;
 
-    final static private int framesPerSecond = 30;
+    final static private int framesPerSecond = 60;
 
     protected static double fieldWidth = 800.0, fieldHeight = 600.0;
     protected double damageOnTanksCollision = 100.0;
@@ -175,13 +176,16 @@ public class GameState extends State {
     protected void updateBonuses(double deltaTime) {
         bonusSpawner.update(deltaTime);
         if(bonusSpawner.isSpawnReady()) {
-            bonuses.add(bonusSpawner.getNewBonus(players[0].getPlayerTank(), players[1].getPlayerTank()));
+            bonuses.add(getNewBonus(numberOfBonusTypes));
         }
         for (Bonus bonus : bonuses) {
             bonus.update(deltaTime);
         }
     }
 
+    protected Bonus getNewBonus(int numberOfBonuses) {
+        return bonusSpawner.getNewBonus(players[0].getPlayerTank(), players[1].getPlayerTank(), numberOfBonuses);
+    }
 
     protected void checkCollisions() {
         ConcurrentLinkedQueue<RoundGameObject> gameObjects = new ConcurrentLinkedQueue<RoundGameObject>();
@@ -237,21 +241,26 @@ public class GameState extends State {
                 gameObjectB.moveTo(shiftPointOnTankCollision(centerB, center, gameObjectB.getRadius()));
             }
         } else if (gameObjectA instanceof Tank && gameObjectB instanceof Bullet) {
-            ((Tank) gameObjectA).addHealthPoints(-((Bullet) gameObjectB).getDamage());
+            Tank tank = (Tank)gameObjectA;
+            Bullet bullet = (Bullet)gameObjectB;
+            double damageDone = bullet.getDamage() * (tank.getStartArmorPoints() / tank.getArmorPoints());
+            ((Tank) gameObjectA).addHealthPoints(-damageDone);
             bullets.remove(gameObjectB);
         } else if (gameObjectA instanceof Tank && gameObjectB instanceof Bonus) {
+            Tank tank = (Tank)gameObjectA;
             switch (((Bonus) gameObjectB).getBonusType()) {
                 case ARMOR:
-                    ((Tank) gameObjectA).addHealthPoints(300);
+                    tank.addArmor(20);
                     break;
                 case HEALTH:
-                    ((Tank) gameObjectA).addHealthPoints(100);
+                    tank.addHealthPoints(300);
                     break;
                 case SPEED:
-                    ((Tank) gameObjectA).addSpeed(3);
+                    tank.addSpeed(10);
+                    tank.addRotationSpeed(10);
                     break;
                 case VISION:
-                    ((Tank) gameObjectA).addVision(3);
+                    tank.addVision(10);
                     break;
                 default:
                     break;
@@ -357,7 +366,7 @@ public class GameState extends State {
         }
     }
 
-    enum SystemSides {Right, Down, Left, Up}
+    public enum SystemSides {Right, Down, Left, Up}
 
     ;
 

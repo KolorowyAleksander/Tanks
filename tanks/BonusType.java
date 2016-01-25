@@ -6,8 +6,8 @@ public enum BonusType {
     SPEED,
     VISION;
 
-    public static BonusType getRandomBonusForHumans() {
-        return values()[(int) (Math.random() * (values().length - 1))];
+    public static BonusType getRandomBonus(int numberOfBonuses) {
+        return values()[(int) (Math.random() * (numberOfBonuses))];
     }
 
     public static String getString(BonusType type) {
@@ -21,6 +21,9 @@ public enum BonusType {
                 break;
             case SPEED:
                 typeString = "speed";
+                break;
+            case VISION:
+                typeString = "vision";
                 break;
             default:
                 typeString = "health";

@@ -25,21 +25,21 @@ public class BonusSpawner {
         return min + (max - min) * randomEngine.nextDouble();
     }
 
-    Bonus getNewBonus (Tank tankOne, Tank tankTwo) {
-        if (timeFromLastSpawn >= timeToNextSpawn) {
+    Bonus getNewBonus (Tank tankOne, Tank tankTwo, int numberOfBonuses) {
+            if (timeFromLastSpawn >= timeToNextSpawn) {
             double x = 0, y = 0;
             Bonus tempBonus;
 
             do {
                 x = getRandomDouble(0, collisionChecker.boundariesWidth);
                 y = getRandomDouble(0, collisionChecker.boundariesHeight);
-                tempBonus = gameObjectFactory.createBonus(x, y, bonusRadius);
+                tempBonus = gameObjectFactory.createBonus(x, y, bonusRadius, numberOfBonuses);
             }
             while (collisionChecker.isColliding(tempBonus, tankOne) || collisionChecker.isColliding(tempBonus, tankTwo) ||
                     collisionChecker.isObjectOutsideOfBoundaries(tempBonus));
 
             timeFromLastSpawn = 0;
-            timeToNextSpawn = getRandomDouble(5, 15);
+            timeToNextSpawn = getRandomDouble(2, 5);
 
             return tempBonus;
         }
