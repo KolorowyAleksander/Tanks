@@ -30,6 +30,9 @@ public class GameState extends State {
     protected long currentTimeInNanos;
 
     final static private int framesPerSecond = 60;
+    final static public int getFramesPerSecond() {
+        return framesPerSecond;
+    }
 
     protected static double fieldWidth = 800.0, fieldHeight = 600.0;
     protected double damageOnTanksCollision = 100.0;
@@ -215,9 +218,11 @@ public class GameState extends State {
 
         if (gameObjectA instanceof Tank && gameObjectB instanceof Tank) {
             final double shiftMultiplier = 2;
+            double damageA = 100 * (Tank.getStartArmorPoints() / ((Tank)gameObjectA).getArmorPoints());
+            double damageB = 100 * (Tank.getStartArmorPoints() / ((Tank)gameObjectB).getArmorPoints());
 
-            ((Tank) gameObjectA).addHealthPoints(-damageOnTanksCollision);
-            ((Tank) gameObjectB).addHealthPoints(-damageOnTanksCollision);
+            ((Tank) gameObjectA).addHealthPoints(-damageA);
+            ((Tank) gameObjectB).addHealthPoints(-damageB);
 
             Point2D centerA = gameObjectA.getCenterPoint();
             Point2D centerB = gameObjectB.getCenterPoint();

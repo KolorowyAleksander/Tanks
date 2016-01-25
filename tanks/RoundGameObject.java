@@ -77,12 +77,8 @@ public abstract class RoundGameObject {
 
 
         }
-        if (rotationAngle < 0) {
-            rotationAngle += 360;
-        }
-        if (rotationAngle >= 360) {
-            rotationAngle -= 360;
-        }
+
+        rotationAngle = (rotationAngle + 360) % 360;
     }
 
     public void move(Move.Movement direction, double deltaTime) {

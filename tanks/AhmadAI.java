@@ -1,26 +1,44 @@
 package tanks;
 
-import javafx.geometry.Point2D;
+/**
+ * Created by Ahmad on 18.01.2016.
+ */
+public class AhmadAI extends ArtificialPlayer {
 
-public class AhmadAI extends ArtificialPlayer{
-    public AhmadAI(int playerNumber, Tank tank) {
-        super(playerNumber, "Ahmad", tank);
+    public AhmadAI(int PlayerNumber, Tank tank) {
+        super(PlayerNumber, "Ahmad", tank);
     }
 
-    public static Move.Movement getRandomMovement() {
-        return Move.Movement.values()[(int)(Math.random() * Move.Movement.values().length)];
-    }
+    public double Hp = getPlayerTank().getHealthPoints();
+    public Move makeMove(double deltatime) {
+        Tank tank;
+        tank = getPlayerTank();
+        double currenthp = getPlayerTank().getHealthPoints();
+        if(currenthp < Hp){
+            Hp = currenthp;
+            return  new Move(Move.Movement.Staying, Move.Rotation.CounterClockwise, Move.Shooting.Shoots);
+        }
+        for (RoundGameObject object : visibleObjectsBuffer){
+            double odleglosc = Math.sqrt(Math.pow(tank.getCenterX() - object.getCenterX(), 2) + (Math.pow(tank.getCenterY() - object.getCenterY(), 2)));
+            if(object instanceof Tank ) {
+                if (odleglosc <= 100.0) return new Move(Move.Movement.Backward, Move.Rotation.Staying, Move.Shooting.Shoots);
+            }
+            if (object instanceof  Tank || object instanceof Bonus){
+                double A = Math.sin((tank.getRotationAngle()-90)* Math.PI / 180) * -1;
+                double B = Math.cos((tank.getRotationAngle()-90)* Math.PI / 180) ;
+                double C = -(tank.getCenterX()* A + tank.getCenterY()* B);
 
-    public static Move.Rotation getRandomRotation() {
-        return Move.Rotation.values()[(int)(Math.random() * Move.Rotation.values().length)];
-    }
-
-    public static Move.Shooting getRandomShooting() {
-        return Move.Shooting.values()[(int)(Math.random() * Move.Shooting.values().length)];
-    }
-
-    public Move makeMove(double deltaTime) {
-
-        return new Move(getRandomMovement(), getRandomRotation(), getRandomShooting());
+                if((object.getCenterX()*A + object.getCenterY() * B + C) < 0) {
+                    return new Move(Move.Movement.Forward, Move.Rotation.CounterClockwise, Move.Shooting.Shoots);
+                }
+                else if((object.getCenterX()*A + object.getCenterY() * B + C) > 0){
+                    return new Move(Move.Movement.Forward, Move.Rotation.Clockwise, Move.Shooting.Shoots);
+                } else {
+                    return new Move(Move.Movement.Forward, Move.Rotation.Staying, Move.Shooting.Shoots);
+                }
+            }
+        }
+        return new Move(Move.Movement.Backward, Move.Rotation.CounterClockwise, Move.Shooting.NotShoots);
     }
 }
+

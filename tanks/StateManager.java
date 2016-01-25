@@ -22,7 +22,8 @@ public class StateManager {
         fxmlFilesNames.put("AIGame", "/FXML/AIGameScene.fxml");
         fxmlFilesNames.put("ResultsScene", "/FXML/ResultScene.fxml");
 
-        artificialPlayersNames = new String[]{"Idle", "Kuba"}; //"Agata", "Olek", "Krzys", "Ahmad", "Kuba"
+        artificialPlayersNames = new String[]{"Agata", "Kuba"};
+        //artificialPlayersNames = new String[]{"Agata", "Olek", "Krzys", "Ahmad", "Kuba"};
     }
 
     public String getFXMLFileName(String stateName) {

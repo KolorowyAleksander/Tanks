@@ -148,7 +148,6 @@ return false;
             System.out.println("Player Angle " + getPlayerTank().getRotationAngle());
         timeCount=0;
         }*/
-        getPlayerTank().addHealthPoints(1.5);
             whileAiming();//myShooting = Move.Shooting.Shoots;
 
         return new Move(myMovement, myRotation, myShooting);

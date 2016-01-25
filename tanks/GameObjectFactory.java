@@ -48,7 +48,7 @@ public class GameObjectFactory {
 
     public Bullet createBullet(double startX, double startY, double startDegree, double radius, double velocity, double damage) {
         double damageWithRandom = damage + getRandomDouble(-0.2 * damage, 0.2 * damage);
-        Bullet newBullet = new Bullet(startX, startY, startDegree, radius, velocity, damage);
+        Bullet newBullet = new Bullet(startX, startY, startDegree, radius, velocity, damageWithRandom);
         newBullet.setImage(imageLoader.getImageFromAlbum("bullet"));
 
         return newBullet;

@@ -2,6 +2,7 @@ package tanks;
 
 import javafx.geometry.Point2D;
 
+import java.time.Clock;
 import java.util.*;
 import java.util.List;
 
@@ -9,6 +10,7 @@ public class KubaAI extends ArtificialPlayer {
     public KubaAI (int playerNumber, Tank tank) {
         super(playerNumber, "Nuurek", tank);
         currentAction = Action.Searching;
+        lastPosition = getPlayerTank().getCenterPoint();
         target = null;
     }
 
@@ -25,8 +27,7 @@ public class KubaAI extends ArtificialPlayer {
                 break;
 
             case ReachingTarget:
-                if ((euclideanSpaceDistance(target, getPlayerTank().getCenterPoint()) < bonusRadius / 4) ||
-                        !checkWhetherTheTargetExists()) {
+                if ((euclideanSpaceDistance(target, getPlayerTank().getCenterPoint()) < bonusRadius)) {
                     target = null;
                     isAngleSet = false;
                 }
@@ -43,8 +44,7 @@ public class KubaAI extends ArtificialPlayer {
 
             case Searching:
                 if (!isSearchingStarted) {
-                    rotationToDo = Move.Rotation.Clockwise;
-                    // rotationToDo = getBestRotationDirection();
+                    rotationToDo = getBestRotationDirection();
                     isSearchingStarted = true;
                 }
                 movementToDo = Move.Movement.Staying;
@@ -56,26 +56,70 @@ public class KubaAI extends ArtificialPlayer {
                 double bonusVisionAngle = (Math.toDegrees(Math.atan2(bonusRadius,
                         euclideanSpaceDistance(tankPosition, target))) + 360) % 360;
                 double deltaAngle = (bonusAngle - tankRotationAngle + 360) % 360;
-                if (Math.abs(deltaAngle) > 5) {
+
+                double shift = euclideanSpaceDistance(tankPosition, lastPosition);
+                double maxShift = 2 * getPlayerTank().getVelocity() * (1.0 / GameState.getFramesPerSecond());
+                if (shift > maxShift) {
                     isAngleSet = false;
                 }
 
                 if (!isAngleSet) {
-                    if (deltaAngle - bonusVisionAngle <= 180 && deltaAngle - bonusVisionAngle >= 0) {
-                        rotationToDo = Move.Rotation.Clockwise;
-                    }
-                    else if (deltaAngle + bonusVisionAngle < 360) {
-                        rotationToDo = Move.Rotation.CounterClockwise;
-                    }
-                    else {
+                    if (deltaAngle < 180 + bonusVisionAngle && deltaAngle > 180 - bonusVisionAngle) {
                         isAngleSet = true;
                     }
-                    //movementToDo = Move.Movement.Staying;
+                    else if (deltaAngle >= 0 && deltaAngle <= 180 - bonusVisionAngle){
+                        rotationToDo = Move.Rotation.CounterClockwise;
+                    }
+                    else if (deltaAngle >= 180 + bonusVisionAngle && deltaAngle < 360) {
+                        rotationToDo = Move.Rotation.Clockwise;
+                    }
+                    movementToDo = Move.Movement.Staying;
                 }
                 else {
-                    rotationToDo = Move.Rotation.Staying;
-                    movementToDo = Move.Movement.Forward;
+                    double tankRadius = getPlayerTank().getRadius();
+                    if (tankPosition.getY() - tankRadius <= tankRadius / 8) {
+                        if (tankRotationAngle >= 0 && tankRotationAngle < 90) {
+                            rotationToDo = Move.Rotation.CounterClockwise;
+                        }
+                        else if (tankRotationAngle > 90 && tankRotationAngle <= 180) {
+                            rotationToDo = Move.Rotation.Clockwise;
+                        }
+                    }
+                    else if (tankPosition.getX() + tankRadius >= GameState.getFieldWidth() - tankRadius / 8) {
+                        if (tankRotationAngle >= 90 && tankRotationAngle < 180) {
+                            rotationToDo = Move.Rotation.CounterClockwise;
+                        }
+                        else if (tankRotationAngle > 180 && tankRotationAngle <= 270) {
+                            rotationToDo = Move.Rotation.Clockwise;
+                        }
+                    }
+                    else if (tankPosition.getY() + tankRadius >= GameState.fieldHeight - tankRadius / 8) {
+                        if (tankRotationAngle >= 180 && tankRotationAngle < 270) {
+                            rotationToDo = Move.Rotation.CounterClockwise;
+                        }
+                        else if (tankRotationAngle > 270 && tankRotationAngle <= 360) {
+                            rotationToDo = Move.Rotation.Clockwise;
+                        }
+                    }
+                    else if (tankPosition.getX() - tankRadius <= tankRadius / 8) {
+                        if (tankRotationAngle >= 270 && tankRotationAngle < 360) {
+                            rotationToDo = Move.Rotation.CounterClockwise;
+                        }
+                        else if (tankRotationAngle > 0 && tankRotationAngle <= 90) {
+                            rotationToDo = Move.Rotation.Clockwise;
+                        }
+                    }
+                    else {
+                        rotationToDo = Move.Rotation.Staying;
+                    }
+                    if (rotationToDo != Move.Rotation.Staying){
+                        isAngleSet = false;
+                    }
+                    movementToDo = Move.Movement.Backward;
                 }
+
+                lastPosition = getPlayerTank().getCenterPoint();
+
                 break;
         }
 
@@ -95,6 +139,7 @@ public class KubaAI extends ArtificialPlayer {
     final static double bonusRadius = 24;
 
     boolean isAngleSet;
+    Point2D lastPosition;
 
     private void swap(Object objectA, Object objectB) {
         Object temp = objectA;
@@ -104,21 +149,30 @@ public class KubaAI extends ArtificialPlayer {
 
     private void searchForTarget() {
         Point2D closestBonus = null;
-        double shortestPath = Double.POSITIVE_INFINITY;
+        double longestPath = 0;
+        double shortestHealPath = Double.POSITIVE_INFINITY;
+        Point2D closestHealth = null;
         for (RoundGameObject object : visibleObjectsBuffer) {
             if (object instanceof Bonus) {
                 double path = euclideanSpaceDistance(getPlayerTank().getCenterPoint(), object.getCenterPoint());
-                if (getPlayerTank().getHealthPoints() == getPlayerTank().getMaxHealthPoints() &&
-                        ((Bonus) object).getBonusType() == BonusType.HEALTH) {
-                    continue;
+                if (getPlayerTank().getHealthPoints() < 700 && ((Bonus) object).getBonusType() == BonusType.HEALTH) {
+                    if (shortestHealPath < path) {
+                        closestHealth = new Point2D(object.getCenterX(), object.getCenterY());
+                        break;
+                    }
                 }
-                if (path < shortestPath) {
-                    shortestPath = path;
+                if (path > longestPath) {
+                    longestPath = path;
                     closestBonus = new Point2D(object.getCenterX(), object.getCenterY());
                 }
             }
         }
-        target = closestBonus;
+        if (closestHealth != null) {
+            target = closestHealth;
+        }
+        else {
+            target = closestBonus;
+        }
     }
 
     private boolean checkWhetherTheTargetExists() {
@@ -265,24 +319,5 @@ public class KubaAI extends ArtificialPlayer {
     protected GameState.SystemSides getOppositeSide(GameState.SystemSides side) {
         int numberOfValues = GameState.SystemSides.values().length;
         return GameState.SystemSides.values()[(side.ordinal() + numberOfValues / 2) % numberOfValues];
-    }
-
-    private final static double changeMovementTime = 2.0, changeRotationTime = 0.5;
-    private double lastChangingOfMovement = 0.0, lastChangingOfRotation = 0.0;
-
-    private Move.Movement currentMovement;
-    private Move.Rotation currentRotation;
-
-
-    public static Move.Movement getRandomMovement() {
-        return Move.Movement.values()[(int)(Math.random() * Move.Movement.values().length)];
-    }
-
-    public static Move.Rotation getRandomRotation() {
-        return Move.Rotation.values()[(int)(Math.random() * Move.Rotation.values().length)];
-    }
-
-    public static Move.Shooting getRandomShooting() {
-        return Move.Shooting.values()[(int)(Math.random() * Move.Shooting.values().length)];
     }
 }
